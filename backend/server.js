@@ -9,6 +9,7 @@ const corsOptions = require('./config/corsOptions');
  const mongoose = require('mongoose');
  const connectDB = require('./config/dbConn');
 const errorHandler = require('./middlewares/errorHandler');
+const router = require('./routes/auth-route')
 
 //  connect to mongoDB
 connectDB()
@@ -32,6 +33,8 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
     res.send("hello mern estate")
 });
+
+app.use(router)
 
 
 // catch all error route
