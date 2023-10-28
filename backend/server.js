@@ -9,7 +9,8 @@ const corsOptions = require('./config/corsOptions');
  const mongoose = require('mongoose');
  const connectDB = require('./config/dbConn');
 const errorHandler = require('./middlewares/errorHandler');
-const router = require('./routes/auth-route')
+const router = require('./routes/auth-route');
+const verifyJWT = require('./middlewares/verifyJWT');
 
 //  connect to mongoDB
 connectDB()
@@ -30,11 +31,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 // routes
+
+app.use(router)
+
+app.use(verifyJWT)
+
 app.get('/', (req, res) => {
     res.send("hello mern estate")
 });
 
-app.use(router)
 
 
 // catch all error route
