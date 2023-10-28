@@ -16,6 +16,13 @@ const userScheema =  new Schema({
         type:String,
         required: true,
     },
+    roles:{
+        user:{
+            type:Number,
+            default:201
+        },
+        Admin:Number
+    },
     refreshToken: String
 })
 

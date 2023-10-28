@@ -49,17 +49,19 @@ exports.signin = async(req, res) => {
     if(!foundUser) return res.status(401).json({message:"user does not exist"});
 
     
-    // check if password is correct
+    // check if password is matches
     const pwdMatch = bcrypt.compareSync(password, foundUser.password)
-    if(!pwdMatch) return res.status(401).json({message:"wrong incredentials... check email | password"});
+    // if(!pwdMatch) return res.status(401).json({message:"wrong incredentials... check email | password"});
     
     // create jwt 
    if(pwdMatch){
+    const roles = Object.values(foundUser.roles);
     const accessToken = jwt.sign(
         {
            "userInfo":{
             "username":foundUser.username,
-            "email":foundUser.email
+            "email":foundUser.email,
+            "roles":roles
            } 
         },
         process.env.ACCESS_TOKEN, {expiresIn: '30s'}
@@ -74,14 +76,15 @@ exports.signin = async(req, res) => {
 
     foundUser.refreshToken = refreshToken;
     const result =  await foundUser.save();
-    // console.log(result)
+    console.log(result)
     res.cookie('jwt', refreshToken, {httpOnly: true, sameSite:'none', secure:true, maxAge:24*60*60*1000});
     res.json({accessToken})
    }else{
-    res.status(401).json({message:"wrong incredentials... check email | password"})
+    return res.status(401).json({message:"wrong incredentials... check email | password"})
    }
 
-}
+};
+
 
 
 exports.refreshToken = async(req, res,) => {
@@ -93,17 +96,20 @@ exports.refreshToken = async(req, res,) => {
 
     const foundUser = await User.findOne({refreshToken}).exec();
     if(!foundUser) return res.sendStatus(403); //forbiden
-    // console.log(foundUser)
+    console.log(foundUser)
 
     //evaluate jwt
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, decoded) => {
         if(err || foundUser.username !== decoded.username)return res.sendStatus(403);
 
+        const roles = Object.values(foundUser.roles);
+
         const accessToken = jwt.sign(
             {
             "userInfo":{
                 "username": decoded.username,
-                "email": decoded.email
+                "email": decoded.email,
+                "roles":roles
                 }
             },
             process.env.ACCESS_TOKEN, {expiresIn:'30s'}
@@ -111,4 +117,28 @@ exports.refreshToken = async(req, res,) => {
             res.json({accessToken})
     } )
 
+};
+
+
+exports.signout = async(req, res) => {
+    // delete cookies from client
+    const cookies = req.cookies;
+    const refreshToken = cookies.jwt;
+    if(!refreshToken) return res.sendStatus(204); //no content
+
+    // check if refreshtoken is in db
+    const foundUser = await User.findOne({refreshToken}).exec();
+
+    if(!foundUser){
+        res.clearCookie('jwt', {httpOnly:true, sameSite:'none', secure:true});
+        res.sendStatus(204); 
+    };
+
+    // delete refreshtoken in db
+    foundUser.refreshToken = ' ';
+    const result = await foundUser.save();
+    console.log(result)
+
+    res.clearCookie('jwt', {httpOnly:true, sameSite:'none', secure:true});
+    res.sendStatus(204)
 }
