@@ -2,20 +2,17 @@ const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 
 exports.updateUser = async(req, res) => {
-    const {username, email, password} = req.body;
     const {id} = req.params;
     let user;
 
     if(!id) return res.status(400).json({message:"user ID is required"})
-      
-        const hashedPwd = bcrypt.hashSync(password, 10)
 
-        if(password){
-            password = hashedPwd
+        if(req.body.password){
+            req.body.password = bcrypt.hashSync(req.body.password, 10)
         }
     try {
-        user = await User.findByIdAndUpdate(id, {username, email, password});
-        res.status(200).json({user})
+        user = await User.findByIdAndUpdate(id, {$set:{...req.body}});
+        res.status(200).json({message:"User updated Successfully"})
     } catch (err) {
         console.log(err)
     }
