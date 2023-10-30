@@ -9,7 +9,8 @@ const corsOptions = require('./config/corsOptions');
  const mongoose = require('mongoose');
  const connectDB = require('./config/dbConn');
 const errorHandler = require('./middlewares/errorHandler');
-const router = require('./routes/auth-route');
+const authRoute = require('./routes/auth-route');
+const userRoute = require('./routes/user-route')
 const verifyJWT = require('./middlewares/verifyJWT');
 
 //  connect to mongoDB
@@ -32,7 +33,8 @@ app.use(cookieParser());
 
 // routes
 
-app.use(router)
+app.use(authRoute)
+app.use(userRoute)
 
 app.use(verifyJWT)
 
