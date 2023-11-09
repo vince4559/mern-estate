@@ -1,13 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useSigninMutation } from './authApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentails } from './authSlice';
-import {useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const Sign_in = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [errmsg, setErrmsg] = useState('');
+
+    const errRef = useRef();
+    const userRef = useRef();
+
+    useEffect(() => {
+        errRef.current?.focus();
+    },[]);
+
+    useEffect(() => {
+        setErrmsg('')
+    },[email, password]);
 
     const navigate = useNavigate();
 
@@ -19,29 +32,42 @@ const Sign_in = () => {
             const userData =await signIn({email, password}).unwrap();
             const username = userData.user
             dispatch(setCredentails({...userData, email, username  }))
+            toast.success('Sign_in Successfull')
             setEmail('');
             setPassword('');
             navigate('/welcome')
             
         } catch (err) {
-            console.log(err.message)
+            if(!err.originalStatus){
+                setErrmsg('No Server Response');
+            }else if(err.originalStatus === 400){
+                setErrmsg('Missing credentails');
+            }else if(err.originalStatus === 401){
+                setErrmsg('Unauthorsed');
+            }else{
+                setErrmsg('Sign_in failed');
+            }
+            errRef.current?.focus();
+            toast.error('sign_in failed. try again...')
         }
     }
 
    
   return (
     <section className='flex flex-col items-center'>
+        <p className='text-red-400'>{errmsg}</p>
         {isLoading? <p>Loading ...</p> : 
         <div>
             <h2 className='text-center my-4'>Sign in  here...</h2>
             <form onSubmit={handleSignIn} >
                 <label htmlFor='email'> Email: <br/>
                     <input type='email' placeholder='Enter Your Email' id='email' value={email} 
-                    onChange={e => setEmail(e.target.value)}  />
+                    onChange={e => setEmail(e.target.value)} required ref={userRef} 
+                    />
                 </label> 
                 <label htmlFor='password'> Password: <br/>
                     <input type='password' placeholder='Enter Your Email' id='password' autoComplete='off'
-                    value={password} onChange={e => setPassword(e.target.value)}
+                    value={password} onChange={e => setPassword(e.target.value)} required ref={userRef}
                     />
                 </label>
 
@@ -51,7 +77,12 @@ const Sign_in = () => {
             </form>
         </div>
         }
-    </section>
+        <ToastContainer 
+            autoClose={1000}
+            draggable
+            theme='dark'
+        />
+</section>
   )
 }
 

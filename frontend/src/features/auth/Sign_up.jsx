@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSignupMutation } from './authApiSlice';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 const Sign_up = () => {
@@ -16,11 +17,13 @@ const Sign_up = () => {
         e.preventDefault();
         try {
             await signup({username, email, password}).unwrap();
+            toast.success('Sign_up Successfull')
             setUsername('')
             setEmail('');
             setPassword('');
            navigate('/signin')
         } catch (err) {
+            toast.error("Error occured during Sign_up")
             console.log(err.message)
         }
     }
@@ -30,7 +33,7 @@ const Sign_up = () => {
         :
         <form onSubmit={handleSignup}>
             <label htmlFor='Username'>Username: <br />
-                 <input type='text' id='username' required placeholder='username'
+                 <input type='text' id='username' required placeholder='username' 
                     value={username} onChange={(e) => setUsername(e.target.value)}
                  />            
             </label> 
@@ -50,6 +53,11 @@ const Sign_up = () => {
             </button>
         </form>
         }
+         <ToastContainer 
+            autoClose={1000}
+            draggable
+            theme='dark'
+        />
     </section>
   )
 }

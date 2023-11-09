@@ -5,9 +5,8 @@ import { currentToken, currentEmail } from './authSlice';
 
 
 const RequiredAuth = () => {
-    const token = useSelector(currentToken);
+    // const token = useSelector(currentToken);
     const email = useSelector(currentEmail);
-    // console.log(token);
     const location = useLocation();
 
   return (
