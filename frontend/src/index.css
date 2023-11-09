@@ -1,3 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    h1{
+        @apply text-3xl font-sans
+    }
+    input{
+        @apply p-2 border border-blue-400 rounded-lg text-black
+    }
+    label{
+        @apply text-blue-900 block my-3 text-base p-2
+    }
+    .btn{
+        @apply p-2 rounded-lg hover:transition hover:duration-300 hover:opacity-80 disabled:bg-slate-400 hover:disabled:opacity-100
+    }
+    .btn-prim{
+        @apply bg-blue-900 text-white 
+    }
+    .btn-sec{
+        @apply bg-blue-700 text-white 
+    }
+}

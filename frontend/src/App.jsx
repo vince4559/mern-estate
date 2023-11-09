@@ -1,12 +1,27 @@
-import React from 'react'
-import Header from './components/Header'
+import { Route, Routes } from 'react-router-dom'
+import Layout from './components/Layout'
+import Public from './components/Public'
+import RequiredAuth from './features/auth/RequiredAuth'
+import Sign_in from './features/auth/Sign_in'
+import Welcome from './features/auth/Welcome'
+import Sign_up from './features/auth/Sign_up'
+
 
 const App = () => {
   return (
-    <div>
-       <Header />
-       <h2>welcome home</h2>      
-    </div>
+    <Routes>
+      <Route path='/' element={<Layout />} >
+        {/* public routes */}
+        <Route index element={<Public />} />
+        <Route path='/signup' element={<Sign_up />} />
+        <Route path='/signin' element={<Sign_in />} />
+
+        {/* protected routes */}
+        <Route element={<RequiredAuth/>}>
+          <Route path='/welcome' element={<Welcome />} />
+        </Route>
+      </Route>
+    </Routes>
   )
 }
 
