@@ -2,22 +2,27 @@ import React, { useState } from 'react'
 import { useSigninMutation } from './authApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentails } from './authSlice';
+import {useNavigate} from 'react-router-dom'
 
 
 const Sign_in = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const navigate = useNavigate();
 
     const dispatch =  useDispatch();
     const [ signIn, {isLoading}] = useSigninMutation();
-
     const handleSignIn =async (e) => {
         e.preventDefault()
         try {
             const userData =await signIn({email, password}).unwrap();
-            dispatch(setCredentails({...userData, email}))
+            const username = userData.user
+            dispatch(setCredentails({...userData, email, username  }))
             setEmail('');
-            setPassword('')
+            setPassword('');
+            navigate('/welcome')
+            
         } catch (err) {
             console.log(err.message)
         }

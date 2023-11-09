@@ -56,6 +56,8 @@ exports.signin = async(req, res) => {
     // create jwt 
    if(pwdMatch){
     const roles = Object.values(foundUser.roles);
+    const user = foundUser.username;
+    // console.log(user)
     const accessToken = jwt.sign(
         {
            "userInfo":{
@@ -73,12 +75,11 @@ exports.signin = async(req, res) => {
     );
 
     // saving refresh token with current user
-
     foundUser.refreshToken = refreshToken;
     const result =  await foundUser.save();
     console.log(result)
     res.cookie('jwt', refreshToken, {httpOnly: true, sameSite:'none', secure:true, maxAge:24*60*60*1000});
-    res.json({accessToken})
+    res.json({accessToken, user})
    }else{
     return res.status(401).json({message:"wrong incredentials... check email | password"})
    }
