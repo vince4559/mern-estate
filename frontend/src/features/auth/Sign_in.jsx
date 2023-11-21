@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSigninMutation } from './authApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentails } from './authSlice';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -10,6 +10,9 @@ const Sign_in = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errmsg, setErrmsg] = useState('');
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || "/"
 
     const errRef = useRef();
     const userRef = useRef();
@@ -26,6 +29,7 @@ const Sign_in = () => {
 
     const dispatch =  useDispatch();
     const [ signIn, {isLoading}] = useSigninMutation();
+
     const handleSignIn =async (e) => {
         e.preventDefault()
         try {
@@ -35,7 +39,7 @@ const Sign_in = () => {
             toast.success('Sign_in Successfull')
             setEmail('');
             setPassword('');
-            navigate('/welcome')
+            navigate(from, {replace: true})
             
         } catch (err) {
             if(!err.originalStatus){

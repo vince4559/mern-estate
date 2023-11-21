@@ -5,6 +5,9 @@ import RequiredAuth from './features/auth/RequiredAuth'
 import Sign_in from './features/auth/Sign_in'
 import Welcome from './features/auth/Welcome'
 import Sign_up from './features/auth/Sign_up'
+import Unathorized from './components/Unauthorized'
+
+
 
 
 const App = () => {
@@ -15,9 +18,11 @@ const App = () => {
         <Route index element={<Public />} />
         <Route path='/signup' element={<Sign_up />} />
         <Route path='/signin' element={<Sign_in />} />
+        <Route path='/unauthorized' element={<Unathorized />} />
+
 
         {/* protected routes */}
-        <Route element={<RequiredAuth/>}>
+        <Route element={<RequiredAuth allowedRoles={[201]} />}>
           <Route path='/welcome' element={<Welcome />} />
         </Route>
       </Route>
