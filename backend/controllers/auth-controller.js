@@ -126,7 +126,7 @@ exports.signout = async(req, res) => {
     // delete cookies from client
     const cookies = req.cookies;
     const refreshToken = cookies.jwt;
-    if(!refreshToken) return res.sendStatus(200); //success
+    if(!refreshToken) return res.sendStatus(204); //no content
 
     // check if refreshtoken is in db
     const foundUser = await User.findOne({refreshToken}).exec();
