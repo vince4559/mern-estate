@@ -20,7 +20,7 @@ const Header = () => {
     const USER = useSelector(currentUser);
     // console.log(USER)
     const [signOut,{isSuccess}] = useSignoutMutation();
-    console.log(isSuccess)
+    // console.log(isSuccess)
     const navigate = useNavigate();
 
 
