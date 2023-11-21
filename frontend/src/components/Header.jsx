@@ -18,18 +18,20 @@ const Header = () => {
     };
     const dispatch = useDispatch();
     const USER = useSelector(currentUser);
+    // console.log(USER)
     const [signOut,{isSuccess}] = useSignoutMutation();
+    console.log(isSuccess)
     const navigate = useNavigate();
 
 
     const handleLogOut = async () => {
         try {
-            await signOut();
-            if(isSuccess === true) {
+            await signOut().unwrap();
+            if(isSuccess === false) {
                 dispatch(logOut())
+                toast.success('You are Logged Out') 
+                navigate('/') 
             }
-            toast.success('You are Logged Out')            
-            navigate('/')
         } catch (err) {
             console.log(err)
             toast.error('Error occured')
