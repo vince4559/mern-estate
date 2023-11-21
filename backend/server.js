@@ -13,6 +13,7 @@ const authRoute = require('./routes/auth-route');
 const userRoute = require('./routes/user-route')
 const verifyJWT = require('./middlewares/verifyJWT');
 
+
 //  connect to mongoDB
 connectDB()
 
@@ -31,17 +32,17 @@ app.use(express.json());
 // middleware for cookies
 app.use(cookieParser());
 
-// routes
 
+// routes
 app.use(authRoute)
 app.use(userRoute)
+
 
 app.use(verifyJWT)
 
 app.get('/', (req, res) => {
     res.send("hello mern estate")
 });
-
 
 
 // catch all error route
