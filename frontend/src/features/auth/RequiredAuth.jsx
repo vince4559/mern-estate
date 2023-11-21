@@ -1,16 +1,17 @@
 import React from 'react';
 import {Outlet, useLocation, Navigate} from "react-router-dom";
 import {useSelector} from "react-redux";
-import { currentEmail, Roles } from './authSlice';
+import { currentEmail, roles } from './authSlice';
 
 
 const RequiredAuth = ({allowedRoles}) => {
     const email = useSelector(currentEmail);
-    const roles = useSelector(Roles);
+    const Roles = useSelector(roles);
+
     const location = useLocation();
 
   return (
-    roles?.find(role => allowedRoles?.includes(role))
+    Roles.find(role => allowedRoles?.includes(role))
     ? <Outlet />
     : email
     ? <Navigate to={'/unauthorized'} state={{from: location}} replace />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSignupMutation } from './authApiSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -51,6 +51,7 @@ const Sign_up = () => {
             <button className='btn btn-sec w-full'>
                 Sign_Up
             </button>
+            <p>Already have an account <Link to={'/signin'} className='text-blue-500'>Sign_in</Link></p>
         </form>
         }
          <ToastContainer 

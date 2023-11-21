@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSigninMutation } from './authApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentails } from './authSlice';
-import {useLocation, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 
 
@@ -12,7 +12,7 @@ const Sign_in = () => {
     const [errmsg, setErrmsg] = useState('');
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/"
+    const from = location.state?.from?.pathname || "/welcome"
 
     const errRef = useRef();
     const userRef = useRef();
@@ -78,6 +78,7 @@ const Sign_in = () => {
                 <button className='btn btn-prim w-full'>
                     Sign in
                 </button>
+                <p>Don't have an account? <Link className='text-blue-600' to={'/signup'}>Sign_Up</Link></p>
             </form>
         </div>
         }
