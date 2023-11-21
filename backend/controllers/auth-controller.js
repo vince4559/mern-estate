@@ -79,7 +79,7 @@ exports.signin = async(req, res) => {
     const result =  await foundUser.save();
     console.log(result)
     res.cookie('jwt', refreshToken, {httpOnly: true, sameSite:'none', secure:true, maxAge:24*60*60*1000});
-    res.json({accessToken, user})
+    res.json({accessToken, user, roles})
    }else{
     return res.status(401).json({message:"wrong incredentials... check email | password"})
    }
@@ -126,7 +126,7 @@ exports.signout = async(req, res) => {
     // delete cookies from client
     const cookies = req.cookies;
     const refreshToken = cookies.jwt;
-    if(!refreshToken) return res.sendStatus(204); //no content
+    if(!refreshToken) return res.sendStatus(200); //success
 
     // check if refreshtoken is in db
     const foundUser = await User.findOne({refreshToken}).exec();
