@@ -19,7 +19,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }),
         signout:builder.mutation({     //logout
             query:() => ({
-                url:'signout',
+                url:'/signout',
                 method:'GET',
             })
         })

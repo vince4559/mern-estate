@@ -11,14 +11,14 @@ const persistConfig = {
     storage
 };
 
-const rootReducers = combineReducers({auth:authReducer})
+// const rootReducers = combineReducers({auth:authReducer})
 
-const persistedReducer = persistReducer(persistConfig, authReducer)
+const persistedAuth = persistReducer(persistConfig, authReducer)
 
 export const store = configureStore({
     reducer:{
         [apiSlice.reducerPath]:apiSlice.reducer,
-        auth: persistedReducer
+        auth: persistedAuth
     },
     middleware:getDefaultMiddleware => getDefaultMiddleware({
         serializableCheck:{

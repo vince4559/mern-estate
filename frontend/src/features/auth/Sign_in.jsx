@@ -35,6 +35,7 @@ const Sign_in = () => {
         try {
             const userData =await signIn({email, password}).unwrap();
             const username = userData.user
+            // console.log(userData)
             dispatch(setCredentails({...userData, email, username  }))
             toast.success('Sign_in Successfull')
             setEmail('');
