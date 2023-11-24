@@ -63,7 +63,8 @@ exports.signin = async(req, res) => {
            "userInfo":{
             "username":foundUser.username,
             "email":foundUser.email,
-            "roles":roles
+            "roles":roles,
+            'id':foundUser._id
            } 
         },
         process.env.ACCESS_TOKEN, {expiresIn: '30s'}

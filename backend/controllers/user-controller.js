@@ -1,6 +1,13 @@
 const User = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 
+
+exports.getUserById = async(req, res) => {
+const {id} = req.params;
+
+};
+
+
 exports.updateUser = async(req, res) => {
     const {id} = req.params;
     let user;
