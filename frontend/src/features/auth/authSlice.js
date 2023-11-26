@@ -33,3 +33,4 @@ export default authSlice.reducer;
 export const currentUser = (state) => state.auth.username;
 export const currentEmail = (state) => state.auth.email;
 export const roles = (state) => state.auth.roles;
+export const current_id = (state) => state.auth._id;

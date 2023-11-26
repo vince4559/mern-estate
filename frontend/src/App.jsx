@@ -20,7 +20,7 @@ const App = () => {
         <Route path='/signup' element={<Sign_up />} />
         <Route path='/signin' element={<Sign_in />} />
         <Route path='/unauthorized' element={<Unathorized />} />
-        <Route path='/profile' element={<Profile />} />
+   
 
 
         {/* protected routes */}

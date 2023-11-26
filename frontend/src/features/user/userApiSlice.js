@@ -1,17 +1,18 @@
+
 import { apiSlice } from "../../app/api/apiSlice";
 
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         updateUser: builder.mutation({
-            query: ({id}) => ({
+            query: ({id, ...rest}) => ({
                 url:`/updateuser/${id}`, 
                 method:'PUT',
-                body:id
+                body:rest
             })
         }),
 
         deleteUSer: builder.mutation({
-            query: ({id}) => ({
+            query: (id) => ({
                 url:`/deleteuser/${id}`,
                 method: 'DELETE',
                 body:id
