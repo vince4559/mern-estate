@@ -47,7 +47,8 @@ exports.deleteUser = async(req, res) => {
     let user;
     try {
         user = await userModel.findByIdAndDelete(id);
-        res.status(200).json({message:"user deleted successfully"})
+        res.clearCookie('jwt');
+        res.status(200).json({message:"user deleted successfully"});
     } catch (err) {
         console.log(err);
     }
