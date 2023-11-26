@@ -1,31 +1,31 @@
 const profileModels= require("../models/profile-models");
-const {getUrlFromFirebaseStorag} = require('../firebase/getUrlFromFirebaseStorag')
+const {uploadImage }= require('../firebase/uploadImage');
 
 
 exports.createProfile = async (req, res) => {
     let profile;
     try {
-        // const file = req.files;
-        let files = [];
-      
+        // const files = []
+       const files = req.files;
 
-        for(let i=0; i<req.files.length; i++){
-            files.push(req.files[i])
-        }
+        // for(let i=0; i<req.files.length; i++){
+        //     files.push(req.files[i])
+        // }
 
-        // console.log(files[0])
-        // console.log('hello')
-        // console.log(files[1])
 
         // if (!files[0]) {
         //   console.log("no file provided");
         //   throw Error("no file provided");
         // };
         
-      const photo = files.map(file => file)
 
-         imgURL = await getUrlFromFirebaseStorag(photo);
-        console.log(imgURL)
+      const urls = await Promise.all(files.map(uploadImage));
+        console.log({urls})
+        res.json({urls})
+
+
+        //  imgURL = await getUrlFromFirebaseStorag(files);
+        // console.log(imgURL)
 
         // profile = await profileModels.create({...req.body, imgURL})
     

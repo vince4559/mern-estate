@@ -7,10 +7,10 @@ const multer = require('multer')
 
 const upload = multer({
     storage: multer.memoryStorage(),
-  });
+});
 
   
-router.post("/profile",  upload.array("imgURL", 6), createProfile);
+router.post("/profile",  upload.array("imgURL"), createProfile);
 
 
 module.exports = router;

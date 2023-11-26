@@ -57,14 +57,14 @@ exports.signin = async(req, res) => {
    if(pwdMatch){
     const roles = Object.values(foundUser.roles);
     const user = foundUser.username;
-    // console.log(user)
+    const _id = foundUser._id;
+    // console.log(id)
     const accessToken = jwt.sign(
         {
            "userInfo":{
             "username":foundUser.username,
             "email":foundUser.email,
             "roles":roles,
-            'id':foundUser._id
            } 
         },
         process.env.ACCESS_TOKEN, {expiresIn: '30s'}
@@ -80,7 +80,7 @@ exports.signin = async(req, res) => {
     const result =  await foundUser.save();
     console.log(result)
     res.cookie('jwt', refreshToken, {httpOnly: true, sameSite:'none', secure:true, maxAge:24*60*60*1000});
-    res.json({accessToken, user, roles})
+    res.json({accessToken, user, roles, _id})
    }else{
     return res.status(401).json({message:"wrong incredentials... check email | password"})
    }
