@@ -19,7 +19,6 @@ const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-console.log(newID)
   const[username, setUsername] = useState(user);
   const[email, setEmail] = useState(mail);
   const[password, setPassword] = useState('');
@@ -53,8 +52,8 @@ console.log(newID)
       if(window.confirm('Account Deleted Cannot be Recovered') === true){
         await deleteUser(newID).unwrap();
         dispatch(logOut())
-        navigate("/")
         toast.success('User deleted successfully')
+        navigate("/")
       }
       
       
