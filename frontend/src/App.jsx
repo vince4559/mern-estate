@@ -7,6 +7,7 @@ import Welcome from './features/auth/Welcome'
 import Sign_up from './features/auth/Sign_up'
 import Unathorized from './components/Unauthorized'
 import Profile from './features/user/Profile'
+import CreateListing from './features/Llisting/CreateListing'
 
 
 
@@ -27,6 +28,7 @@ const App = () => {
         <Route element={<RequiredAuth allowedRoles={[201]} />}>
           <Route path='/welcome' element={<Welcome />} />
           <Route path='/profile' element={<Profile />} />
+          <Route path='/createlisting' element={<CreateListing/>} />
         </Route>
       </Route>
     </Routes>
