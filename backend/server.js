@@ -11,7 +11,6 @@ const corsOptions = require('./config/corsOptions');
 const errorHandler = require('./middlewares/errorHandler');
 const authRoute = require('./routes/auth-route');
 const userRoute = require('./routes/user-route')
-const profileRoute = require('./routes/profile-route')
 const listingRoute = require('./routes/listing-route')
 const verifyJWT = require('./middlewares/verifyJWT');
 
@@ -38,7 +37,6 @@ app.use(cookieParser());
 // routes
 app.use(authRoute)
 app.use(userRoute)
-app.use(profileRoute);
 app.use(listingRoute)
 
 

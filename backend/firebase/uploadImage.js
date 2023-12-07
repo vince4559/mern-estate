@@ -1,9 +1,10 @@
-const { getStorage } = require("firebase-admin/storage");;
+
+// const bucket = require('./initializeApp');
+const bucket = require("../firebaseStorage/fileStorage")
 
 
 
 exports.uploadImage = async(file) => {
-  const bucket = getStorage().bucket();
     try {
       if (!file) {
         return res.status(400).json({ error: "No file provided" });
@@ -17,7 +18,7 @@ exports.uploadImage = async(file) => {
       const url = await bucket
         .file(fileName)
         .getSignedUrl({ action: "read", expires: "03-01-2500" });
-      await bucket.file(fileName).save(buffer, { resumable: true });
+       bucket.file(fileName).save(buffer, { resumable: true });
       return url;
     } catch (error) {
       return error.message;

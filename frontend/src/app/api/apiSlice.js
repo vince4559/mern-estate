@@ -4,17 +4,17 @@ import { setCredentails, logOut } from "../../features/auth/authSlice";
 const baseQuerry = fetchBaseQuery({
     baseUrl:"http://localhost:3500/api",
     credentials:'include',
-    prepareHeaders:(Headers, {getState}) => {
+    prepareHeaders:(headers, {getState}) => {
+       
         const token = getState().auth.token;
-
         if(token){
-            Headers.set('authorization', `Bearer ${token}`)
+            headers.set('authorization', `Bearer ${token}`)
         };
-        return Headers
+        return headers
     },
 });
 
-const baseQuerryWithReauth = async(args, api, extraOptions) => {
+const baseQuerryWithReauth = async( args, api, extraOptions) => {
     let result = await baseQuerry(args, api, extraOptions);
 
     if(result?.error?.originalStatus === 403){

@@ -53,7 +53,7 @@ const Sign_in = () => {
                 setErrmsg('Sign_in failed');
             }
             errRef.current?.focus();
-            toast.error('sign_in failed. try again...')
+            toast.error('error occured')
         }
     }
 

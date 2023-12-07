@@ -35,19 +35,17 @@ const listingSchema = new Schema({
         type:String,
         required: true,
     },
-    parkingSpot:{
+    parkingLot:{
         type:Boolean,
         required: true
     },
     furnished:{
         type:Boolean,
-        required:true
     },
     offer:{
         type:Boolean,
-        required:true
     },
-    imageUrl:{
+    photos:{
         type:Array,
         required: true
     },
