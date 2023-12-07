@@ -8,6 +8,7 @@ import Sign_up from './features/auth/Sign_up'
 import Unathorized from './components/Unauthorized'
 import Profile from './features/user/Profile'
 import CreateListing from './features/Llisting/CreateListing'
+import SingleListing from './features/Llisting/SingleListing'
 
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
           <Route path='/welcome' element={<Welcome />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/createlisting' element={<CreateListing/>} />
+          <Route path='/listing/:id' element={<SingleListing />} />
         </Route>
       </Route>
     </Routes>

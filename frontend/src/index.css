@@ -6,7 +6,7 @@
     h1{
         @apply text-3xl font-sans
     }
-    input{
+    input, textarea{
         @apply p-2 border border-blue-400 rounded-lg text-black
     }
     label{
