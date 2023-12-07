@@ -10,7 +10,7 @@ exports.uploadImage = async(file) => {
         return res.status(400).json({ error: "No file provided" });
       }
       const fileName = `${Date.now()}` + file.originalname;
-      // bucket.file(fileName).save(buffer,ops)
+  
       // this buffer is image file converted to Unit8Array
       // if you use multer({ storage: multer.memoryStorage() }) to config
       // there is no file path will be stored in file
