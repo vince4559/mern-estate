@@ -1,3 +1,4 @@
+const listingModel = require('../models/listing-model');
 const userModel = require('../models/user-model')
 const bcrypt = require('bcryptjs')
 
@@ -56,5 +57,22 @@ exports.deleteUser = async(req, res) => {
     if(!user){
         return res.status(404).json({message:"Error occured... User not deleted"})
     }
+};
 
-}
+exports.getUserListings = async(req, res) => {
+    let listing
+
+    // const user = req.user;
+    // console.log(user)
+    if(req.params.id){
+        try {
+            listing = await listingModel.find({userRef : req.params.id});
+            res.status(200).json(listing);
+        } catch (error) {
+            console.log(error);
+            if(!listing) return res.status(404).json({message: 'No listing found'})
+        }
+    }else{
+        return res.status(404).json({message: "you can only view your listing"})
+    }
+};

@@ -35,13 +35,12 @@ app.use(cookieParser());
 
 
 // routes
-app.use(authRoute)
-app.use(userRoute)
-app.use(listingRoute)
+app.use(authRoute);
 
 
-
-app.use(verifyJWT)
+// app.use(verifyJWT);
+app.use(userRoute);
+app.use(listingRoute);
 
 
 app.get('/', (req, res) => {

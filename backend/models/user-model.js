@@ -24,6 +24,6 @@ const userScheema =  new Schema({
         Admin:Number
     },
     refreshToken: String
-})
+},{timestamps: true})
 
 module.exports = mongoose.model('user', userScheema);

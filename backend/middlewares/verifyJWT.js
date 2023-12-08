@@ -12,6 +12,9 @@ const verifyJWT = (req, res, next) => {
         req.username = decoded.userInfo.username;
         req.mail = decoded.userInfo.mail;
         req.roles = decoded.userInfo.roles;
+
+
+        req.decoded.userInfo = user
         next();
     })
 }
