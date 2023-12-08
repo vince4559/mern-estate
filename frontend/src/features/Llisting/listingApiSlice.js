@@ -8,6 +8,22 @@ export const listingApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: {...Credential}
             })
+        }),
+
+        deleteListing: builder.mutation({
+            query:(id) => ({
+                url: `/deletelisting/${id}`,
+                method: "DELETE ",
+                body: id
+            })
+        }),
+
+        updateListing: builder.mutation({
+            query:({id, rest}) => ({
+                url: `/updatelisting/${id}`,
+                method: "PUT",
+                body: {...rest}
+            })
         })
     })
 })

@@ -53,7 +53,7 @@ const Header = () => {
            <div className='md:flex hidden gap-5 '>
                 <NavLink to={'/'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Home</NavLink>
                 <NavLink to={'/profile'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Profile</NavLink>
-                <NavLink to={'/createlisting'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>create_listing</NavLink>
+                <NavLink to={'/listings'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Listing</NavLink>
                {USER ? 
                <button onClick={handleLogOut}>Sign_Out</button> 
                :  <NavLink to={'/signin'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Sign in</NavLink>

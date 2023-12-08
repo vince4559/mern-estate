@@ -9,6 +9,7 @@ import Unathorized from './components/Unauthorized'
 import Profile from './features/user/Profile'
 import CreateListing from './features/Llisting/CreateListing'
 import SingleListing from './features/Llisting/SingleListing'
+import Listings from './features/Llisting/Listings'
 
 
 const App = () => {
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/signup' element={<Sign_up />} />
         <Route path='/signin' element={<Sign_in />} />
         <Route path='/unauthorized' element={<Unathorized />} />
+        <Route path='/listings' element={<Listings />} />
   
    
 

@@ -1,6 +1,7 @@
 
 import { apiSlice } from "../../app/api/apiSlice";
 
+
 export const userApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         updateUser: builder.mutation({
@@ -19,7 +20,12 @@ export const userApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
+        userListing: builder.query({
+            query: ({id}) => ({
+                url: `/userlisting/${id}`,
+            })
+        })
     })
 })
 
-export const {useDeleteUSerMutation, useUpdateUserMutation} = userApiSlice;
+export const {useDeleteUSerMutation, useUpdateUserMutation, useUserListingQuery} = userApiSlice;
