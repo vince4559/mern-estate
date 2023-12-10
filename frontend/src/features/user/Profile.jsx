@@ -1,13 +1,19 @@
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { currentEmail, currentUser, current_id } from '../auth/authSlice'
-import { useUpdateUserMutation, useDeleteUSerMutation} from './userApiSlice'
-import Sign_out from '../../features/auth/Sign_out'
-import { useNavigate } from 'react-router-dom'
-import { logOut } from '../auth/authSlice'
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { currentEmail, currentUser, current_id } from '../auth/authSlice';
+import Sign_out from '../../features/auth/Sign_out';
+import { useNavigate } from 'react-router-dom';
+import { logOut } from '../auth/authSlice';
 import { ToastContainer, toast } from 'react-toastify';
-import userImg from '/images/userImg.png'
-import { useUserListingQuery } from './userApiSlice';
+import userImg from '/images/userImg.png';
+import { 
+  useUpdateUserMutation, 
+  useDeleteUSerMutation, 
+  useUserListingQuery,
+} from './userApiSlice';
+import { useDeleteListingMutation } from '../Llisting/listingApiSlice';
+
+
 
 
 
@@ -24,9 +30,14 @@ const Profile = () => {
   const[email, setEmail] = useState(mail);
   const[password, setPassword] = useState('');
   const [listings, setListings] = useState([]);
+  const [show, setShow] = useState(false);
+
+
 
   const [updateUSer, {isLoading}] = useUpdateUserMutation();
-  const [deleteUser] = useDeleteUSerMutation();
+  const [deleteUser] = useDeleteUSerMutation();  
+  const  {data} = useUserListingQuery({id: newID});
+  const [deleteListing] = useDeleteListingMutation();
 
 
 
@@ -65,17 +76,13 @@ const Profile = () => {
     }
   };
 
-  const  {data} = useUserListingQuery({id: newID});
- 
 
   // user listing category
 
     const handleShowListing = async() => {
-       try {
-          const listings = await data;
-          setListings(listings)
-       } catch (error) { 
-       }
+      const dat = await data
+      setShow(!show);
+     setListings(dat)
     };
 
   
@@ -110,10 +117,10 @@ const Profile = () => {
           <Sign_out />
          </div>
 
-         <button onClick={handleShowListing} className='btn btn-sec my-3'>Show Listings</button>
+         <button onClick={handleShowListing} className='btn btn-sec my-3'>{show? "Hide Listing" : "Show Listing"}</button>
 
-         {listings && listings < 1 ? <p>No listing created</p> 
-          :  [...listings].map(listing => (
+         { show == true &&
+          listings.map(listing => (
             <div key={listing._id} className='my-4'>
                 <div className='flex gap-5 items-center'>
                     <div className='flex gap-3 items-center'>
@@ -122,13 +129,23 @@ const Profile = () => {
                     </div>
 
                     <div className='flex gap-3 items-center'>
-                      <p >Edit</p>
-                      <p>delete</p>
+                      <p>Edit</p>
+                      <button onClick={ async() => {
+                            try {
+                              await deleteListing(listing._id);
+                              toast.success("listing deleted")
+                            } catch (error) {
+                              console.log(error)
+                              toast.error('Error occured')
+                            }
+                          }}>
+                        delete
+                      </button>
                     </div>
                 </div>
             </div>
           )) 
-        }
+         }
       </div>
       <ToastContainer 
             autoClose={1000}

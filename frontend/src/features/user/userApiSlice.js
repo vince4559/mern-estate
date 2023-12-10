@@ -24,8 +24,13 @@ export const userApiSlice = apiSlice.injectEndpoints({
             query: ({id}) => ({
                 url: `/userlisting/${id}`,
             })
-        })
+        }),
+
     })
 })
 
-export const {useDeleteUSerMutation, useUpdateUserMutation, useUserListingQuery} = userApiSlice;
+export const {
+    useDeleteUSerMutation, 
+    useUpdateUserMutation, 
+    useUserListingQuery, 
+} = userApiSlice;
