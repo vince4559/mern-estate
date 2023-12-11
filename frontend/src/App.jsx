@@ -10,6 +10,7 @@ import Profile from './features/user/Profile'
 import CreateListing from './features/Llisting/CreateListing'
 import SingleListing from './features/Llisting/SingleListing'
 import Listings from './features/Llisting/Listings'
+import EditListing from './features/Llisting/EditListing'
 
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
           <Route path='/profile' element={<Profile />} />
           <Route path='/createlisting' element={<CreateListing/>} />
           <Route path='/listing/:id' element={<SingleListing />} />
+          <Route path='/edit_listing/:id' element={<EditListing />} />
         </Route>
       </Route>
     </Routes>

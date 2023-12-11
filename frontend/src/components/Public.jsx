@@ -1,8 +1,8 @@
 import React from 'react'
 
 
-const Public = () => {
 
+const Public = () => {
   return (
     <section>
         <h3>Public space of the mern estate app</h3>

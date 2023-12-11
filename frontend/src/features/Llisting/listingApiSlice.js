@@ -17,8 +17,28 @@ export const listingApiSlice = apiSlice.injectEndpoints({
                 body: id
             })
         }),
+
+        updateListing: builder.mutation({
+            query: ({id, ...rest}) => ({
+                url: `/updatelisting/${id}`,
+                method: "PUT",
+                body: rest
+            })
+        }),
+
+        getListingById: builder.query({
+            query: ({id}) => ({
+                url: `/listing/${id}`
+            })
+        }),
+
     })
 })
 
 
-export const {useCreateListingMutation, useDeleteListingMutation } = listingApiSlice;
+export const {
+    useCreateListingMutation, 
+    useDeleteListingMutation, 
+    useUpdateListingMutation ,
+    useGetListingByIdQuery,
+}     = listingApiSlice;

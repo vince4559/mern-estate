@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { current_id } from '../auth/authSlice';
-import { useSelector } from 'react-redux';
 
 
 const initials = {
@@ -23,7 +21,6 @@ const initials = {
 const CreateListing = () => {
 const [formData, setFormData] = useState(initials);
 const [files, setFiles] = useState(null);
-const [status, setStatus] = useState('');
 const navigate = useNavigate();
 
 const userRef = useSelector(current_id);
@@ -42,7 +39,6 @@ const handleFileChange = (e) => {
 
 const handleFormSubmit = async(e) => {
     e.preventDefault();
-    setStatus('uploading')
 
   if(files){
         const formDatas = new FormData();
@@ -76,14 +72,13 @@ const handleFormSubmit = async(e) => {
             });
     
             const data = await result.json();
+
     
             console.log(data);
-            setStatus('success')
             toast.success('Listing created')
-            navigate(`/listing/${data._id}`)
+            navigate('/listings')
           } catch (error) {
             console.error(error);
-            setStatus('error')
             toast.error(`${error}`)
           }
     }
@@ -171,11 +166,7 @@ const handleFormSubmit = async(e) => {
                         onChange={handleFileChange} required multiple
                     />
                 </label>
-                {/* <label htmlFor='userRef'>userRef <br />
-                    <input type='text' placeholder='userRef' name='userRef' id='userRef'
-                        value={formData.userRef} onChange={handleFormChange} required
-                    />
-                </label> */}
+                
             </div>
             <button className='btn btn-sec w-full' disabled={status === 'uploading'}>
                 Create Listing
@@ -192,15 +183,3 @@ const handleFormSubmit = async(e) => {
 }
 
 export default CreateListing;
-
-const Result = (status) => {
-    if(status === 'success'){
-        return <p>Uploaded Successfully</p>
-    }else if(status ==='error'){
-        return <p>Uploading failed</p>
-    }else if(status ==='uploading'){
-        return <p>Uploading started</p>
-    }else {
-        return null
-    }
-}

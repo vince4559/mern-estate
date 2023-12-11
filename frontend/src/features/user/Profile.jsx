@@ -11,7 +11,7 @@ import {
   useDeleteUSerMutation, 
   useUserListingQuery,
 } from './userApiSlice';
-import { useDeleteListingMutation } from '../Llisting/listingApiSlice';
+import { useDeleteListingMutation, useUpdateListingMutation } from '../Llisting/listingApiSlice';
 
 
 
@@ -36,9 +36,8 @@ const Profile = () => {
 
   const [updateUSer, {isLoading}] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUSerMutation();  
-  const  {data} = useUserListingQuery({id: newID});
+  const  {data, isFetching} = useUserListingQuery({id: newID});
   const [deleteListing] = useDeleteListingMutation();
-
 
 
   const handleUpdateUSer = async (e) => {
@@ -77,15 +76,26 @@ const Profile = () => {
   };
 
 
-  // user listing category
-
+  // show user listing
     const handleShowListing = async() => {
       const dat = await data
       setShow(!show);
      setListings(dat)
     };
 
-  
+    // edit user listing
+    const handleUpdateListing = async(listing) => {
+      try {
+        navigate(`/edit_listing/${listing._id}`, {state: listing})
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    // navigate to single user listing
+    const handleNav = (list) => {
+      navigate(`/listing/${list._id}`, {state:list})
+    }
 
   return (
     <section className='flex gap-4 justify-center mt-4 p-4'>
@@ -119,21 +129,25 @@ const Profile = () => {
 
          <button onClick={handleShowListing} className='btn btn-sec my-3'>{show? "Hide Listing" : "Show Listing"}</button>
 
-         { show == true &&
+         {isFetching ? <p>loading</p> : show == true &&
           listings.map(listing => (
             <div key={listing._id} className='my-4'>
                 <div className='flex gap-5 items-center'>
-                    <div className='flex gap-3 items-center'>
+                    <div onClick={() => handleNav(listing)} className='flex gap-3 items-center cursor-pointer'>
                       <img src={listing.photos[0]} alt={listing.name} className='w-10 h-10 rounded-full'/>
                       <p>{listing.name}</p>
                     </div>
 
                     <div className='flex gap-3 items-center'>
-                      <p>Edit</p>
+                      <button onClick={() => handleUpdateListing(listing)}>
+                        Edit
+                      </button>
+                      {/* delete listing */}
                       <button onClick={ async() => {
                             try {
                               await deleteListing(listing._id);
                               toast.success("listing deleted")
+                              navigate('/profile')
                             } catch (error) {
                               console.log(error)
                               toast.error('Error occured')

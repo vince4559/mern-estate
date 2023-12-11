@@ -61,14 +61,16 @@ exports.deleteListingById = async(req, res) => {
 exports.updateListingById = async(req, res) => {
     let listing;
     const id = req.params.id;
+    // listing = listingModel.findById(id);
+
     if(!id) return res.status(404).json({message:'listing id is required'});
 
     try {
-        listing = await listingModel.findByIdAndUpdate(id, {$set:req.body}, {new: true}); 
+        listing = await listingModel.findByIdAndUpdate(id, {$set:req.body}, {new:true}); 
         res.status(200).json(listing)
     } catch (error) {
         console.log(error)
-        if(!listing) return res.status(404).json({message:'cannot update listing'})
+        if(!listing) return res.status(404).json({message:'cannot find listing'})
     }
 
 }
