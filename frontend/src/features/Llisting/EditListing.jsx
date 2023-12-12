@@ -7,28 +7,28 @@ import { useUpdateListingMutation } from './listingApiSlice';
 
 const EditListing = () => {
     const location = useLocation();
-    const list = location.state;
-    const navigate = useNavigate()
+    const listing = location.state;
+
+    const navigate = useNavigate();
 
 
     const [updateListing, {isLoading}] = useUpdateListingMutation();
   
     const initials = {
-        name: list.name,
-        desc: list.desc,
-        address:list.address,
-        regularPrice: list.regularPrice,
-        discountPrice: list.discountPrice,
-        bathroom: list.bathroom,
-        bedroom: list.bedroom,
-        type: list.type,
-        parkingLot: list.parkingLot,
-        furnished: list.furnished,
-        offer: list.offer,
+        name: listing.name,
+        desc: listing.desc,
+        address:listing.address,
+        regularPrice: listing.regularPrice,
+        discountPrice: listing.discountPrice,
+        bathroom: listing.bathroom,
+        bedroom: listing.bedroom,
+        type: listing.type,
+        parkingLot: listing.parkingLot,
+        furnished: listing.furnished,
+        offer: listing.offer,
     }
 
-    const [formData, setFormData] = useState(initials);
-  
+    const [formData, setFormData] = useState(initials);  
 
 
     const handleFormChange = async(e) => {
@@ -39,9 +39,9 @@ const EditListing = () => {
     const handleFormSubmit = async(e) => {
         e.preventDefault();
         try {
-           await updateListing({id:list._id, ...formData}).unwrap();
+           await updateListing({id:listing._id, ...formData}).unwrap();
            toast.success('updated successfully')
-           navigate('/profile')
+           navigate(`/listing/${listing._id}` , {state: listing})
         } catch (error) {
             console.log(error)
             toast.error("error occurred")

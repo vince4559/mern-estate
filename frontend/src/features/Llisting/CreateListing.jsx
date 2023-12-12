@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { current_id } from '../auth/authSlice';
+import { useSelector } from 'react-redux';
 
 
 const initials = {
@@ -63,7 +65,10 @@ const handleFormSubmit = async(e) => {
         
         if(formData.discountPrice >= formData.regularPrice){
             return console.log('discount price cannnot be the same or higher than regular price')
-        }
+        };
+
+        
+        if(files.length > 4) return console.log('only 4 images max is allowed')
 
         try {
             const result = await fetch("http://localhost:3500/api/createlisting", {
@@ -74,7 +79,7 @@ const handleFormSubmit = async(e) => {
             const data = await result.json();
 
     
-            console.log(data);
+            // console.log(data);
             toast.success('Listing created')
             navigate('/listings')
           } catch (error) {
@@ -162,17 +167,16 @@ const handleFormSubmit = async(e) => {
                 
 
                 <label htmlFor='Photos'>photos must note be more than 6: <br />
-                    <input type='file' accept='image/*' name='photos' id='photos'
-                        onChange={handleFileChange} required multiple
+                    <input type='file' accept='image/*' name='photos' id='photos' size={1024*2}
+                        onChange={handleFileChange} required multiple min={4} max={4}
                     />
                 </label>
                 
             </div>
-            <button className='btn btn-sec w-full' disabled={status === 'uploading'}>
+            <button className='btn btn-sec w-full'>
                 Create Listing
             </button>
         </form>
-        <Result status={status} />
         <ToastContainer 
             autoClose={1000}
             draggable

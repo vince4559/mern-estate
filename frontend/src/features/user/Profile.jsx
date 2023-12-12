@@ -93,8 +93,8 @@ const Profile = () => {
     };
 
     // navigate to single user listing
-    const handleNav = (list) => {
-      navigate(`/listing/${list._id}`, {state:list})
+    const handleNav = (listing) => {
+      navigate(`/listing/${listing._id}`, {state:listing})
     }
 
   return (
