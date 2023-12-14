@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import ImageCarosel from '../../components/ImageCarosel';
 import { IoLocationSharp } from "react-icons/io5";
 import { FaBed, FaBath, FaParking, FaChair   } from "react-icons/fa";
+import { current_id } from '../auth/authSlice';
+import { useDispatch } from 'react-redux';
+import Contact from '../contact/Contact';
 
 
 
@@ -10,6 +13,10 @@ const SingleListing = () => {
   const location = useLocation();
  const listing = location.state;
  const photo = listing.photos;
+
+ const currentId = useDispatch(current_id);
+
+ const [contact, setContact] = useState(false);
 
   return (
    <section>
@@ -28,9 +35,14 @@ const SingleListing = () => {
 
         <div className='flex gap-5'>
             <p className='py-1 px-2 bg-red-800 w-fit rounded my-3 text-white'>For {listing.type}</p>
-            <p className='py-1 px-2 text-green-500 w-fit rounded my-3'>
-             {listing.discountPrice === 0 ? '' : ` Discount Price: $${listing.discountPrice}`}
+            {
+              listing.offer && 
+              <p className='py-1 px-2 bg-blue-800 w-fit rounded my-3 text-white'>
+              Discount Of ${listing.regularPrice - listing.discountPrice}
             </p>
+            }
+            
+           
         </div>
         <p>Description:
             <span>{listing.desc}</span>
@@ -56,10 +68,16 @@ const SingleListing = () => {
             <FaChair   size={18} color='green' />
             {listing.furnished == true? 'Furnished' : 'Not Furnished' }
           </p> 
-       
         </div>
 
-        <button className='btn btn-sec w-full'>Contact landlord</button>
+       {
+          currentId && !contact &&
+         <button className='btn btn-sec w-full' onClick={() => setContact(true)}>
+            Contact landlord
+          </button>
+       }
+
+       {contact && <Contact listing={listing} />}
       </div>
    </section>
   )

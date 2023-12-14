@@ -23,6 +23,7 @@ const App = () => {
         <Route path='/signin' element={<Sign_in />} />
         <Route path='/unauthorized' element={<Unathorized />} />
         <Route path='/listings' element={<Listings />} />
+        <Route path='/listing/:id' element={<SingleListing />} />
   
    
 
@@ -32,7 +33,6 @@ const App = () => {
           <Route path='/welcome' element={<Welcome />} />
           <Route path='/profile' element={<Profile />} />
           <Route path='/createlisting' element={<CreateListing/>} />
-          <Route path='/listing/:id' element={<SingleListing />} />
           <Route path='/edit_listing/:id' element={<EditListing />} />
         </Route>
       </Route>

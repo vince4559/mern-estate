@@ -11,7 +11,7 @@ import {
   useDeleteUSerMutation, 
   useUserListingQuery,
 } from './userApiSlice';
-import { useDeleteListingMutation, useUpdateListingMutation } from '../Llisting/listingApiSlice';
+import { useDeleteListingMutation } from '../Llisting/listingApiSlice';
 
 
 
@@ -127,7 +127,7 @@ const Profile = () => {
           <Sign_out />
          </div>
 
-         <button onClick={handleShowListing} className='btn btn-sec my-3'>{show? "Hide Listing" : "Show Listing"}</button>
+         <button onClick={handleShowListing} className='btn btn-sec my-3'>{show? "Hide Listing" : isFetching? 'Loading': "Show Listing"}</button>
 
          {isFetching ? <p>loading</p> : show == true &&
           listings.map(listing => (
