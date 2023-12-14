@@ -13,6 +13,7 @@ const authRoute = require('./routes/auth-route');
 const userRoute = require('./routes/user-route')
 const listingRoute = require('./routes/listing-route')
 const verifyJWT = require('./middlewares/verifyJWT');
+const sendEmailRoute = require('./routes/sendEmail-route')
 
 
 //  connect to mongoDB
@@ -41,6 +42,9 @@ app.use(authRoute);
 // app.use(verifyJWT);
 app.use(userRoute);
 app.use(listingRoute);
+app.use(sendEmailRoute);
+
+
 
 
 app.get('/', (req, res) => {
