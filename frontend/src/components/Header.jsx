@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import logo from '/images/logo.png'
 import  { NavLink, useNavigate}  from "react-router-dom";
 import { BiMenuAltRight } from 'react-icons/bi';
@@ -8,9 +8,11 @@ import {currentUser} from '../features/auth/authSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { useSignoutMutation } from '../features/auth/authApiSlice';
 import { logOut } from '../features/auth/authSlice';
+import { FaSearch } from "react-icons/fa";
 
 const Header = () => {
     const [show, setShow] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     // console.log(show)
 
     const onToggle = () => {
@@ -36,7 +38,24 @@ const Header = () => {
             console.log(err)
             toast.error('Error occured')
         }
-    }
+    };
+
+    const handleSearchSubmit = async (e) => {
+        e.preventDefault();
+
+        const urlparams = new URLSearchParams(window.location.search);
+        urlparams.set('searchTerm', searchTerm);
+        const searchQuery = urlparams.toString();
+        navigate(`/search?${searchQuery}`)
+    };
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        if(searchTermFromUrl){
+            setSearchTerm(searchTermFromUrl);
+        }
+    },[location.search])
 
   return (
    <header className='w-full p-1 bg-black text-white'>
@@ -46,9 +65,18 @@ const Header = () => {
                      <img alt='logo' src={logo} className='w-14' />
                 </NavLink>
             </div>
-            <div >
-                <input type='search' className='p-1 rounded-lg border border-white-400 text-black'/>
-            </div>
+           
+                <form onSubmit={handleSearchSubmit} className='flex gap-2 items-center'>
+                    <input type='search' id='search' placeholder='Search...'
+                    value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
+                    className='p-1 rounded-lg border border-white-400 text-black'
+                     
+                    />
+                    <button type='submit'>
+                        <FaSearch />
+                    </button>
+                </form>              
+          
            <div className='flex'>
            <div className='md:flex hidden gap-5 '>
                 <NavLink to={'/'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Home</NavLink>

@@ -11,6 +11,7 @@ import CreateListing from './features/Llisting/CreateListing'
 import SingleListing from './features/Llisting/SingleListing'
 import Listings from './features/Llisting/Listings'
 import EditListing from './features/Llisting/EditListing'
+import SearchPage from './components/SearchPage'
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path='/unauthorized' element={<Unathorized />} />
         <Route path='/listings' element={<Listings />} />
         <Route path='/listing/:id' element={<SingleListing />} />
+        <Route path='/search' element={<SearchPage />} />
   
    
 
