@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGetAllListingsQuery } from '../features/Llisting/listingApiSlice';
 
 
 const initials = {
@@ -14,7 +15,15 @@ const initials = {
 
 const SearchPage = () => {
     const [sideSearchData, setSideSearchData] = useState(initials);
+    const [listings, setListing] = useState([]);
+    const [loading, setLoading] = useState(false);
+    console.log(listings)
+
     const navigate = useNavigate();
+
+    const {data, isLoading } = useGetAllListingsQuery();
+       
+
 
     const handleOnchange = (e) => {
         // type category
@@ -88,7 +97,20 @@ const SearchPage = () => {
                 order: orderFromUrl || 'desc',
             })
         }
-    },[])
+
+        // fetch listings here
+        const searchQuery = urlparams.toString();
+        const fetchListings = async () => {
+            setLoading(true)
+            const res = await fetch(`http://localhost:3500/api/getlistings?${searchQuery}`);
+            const data = await res.json();
+            setLoading(false)
+            setListing(data)
+        }
+        
+        fetchListings();
+
+    },[location.search])
 
     
 

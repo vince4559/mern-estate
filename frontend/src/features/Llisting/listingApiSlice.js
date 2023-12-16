@@ -32,6 +32,12 @@ export const listingApiSlice = apiSlice.injectEndpoints({
             })
         }),
 
+        getAllListings: builder.query({
+            query: ({searchQuery}) => ({
+                url: `/getlistings?${searchQuery}`
+            })
+        }),
+
     })
 })
 
@@ -41,4 +47,5 @@ export const {
     useDeleteListingMutation, 
     useUpdateListingMutation ,
     useGetListingByIdQuery,
+    useGetAllListingsQuery,
 }     = listingApiSlice;
