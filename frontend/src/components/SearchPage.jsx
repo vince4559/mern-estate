@@ -192,20 +192,21 @@ const SearchPage = () => {
             </form>
 
             <div className='hidden md:block'>
-                <video src={lottie} width={400} preload={true}  loop controls />
+                <video src={lottie} width={400} autoPlay loop controls />
             </div>
         </div>
 
         {/* fetch data here */}
         <div className='mb-4'>
+            <h2 className='text-center my-4'>Listings...</h2>
                 {
-                    isError? <p>Data not found</p> :
+                    isError && [] ? <p>Data not found</p> :
                     isLoading? <p>Data is loading</p> : 
                     <div className='flex flex-row l flex-wrap gap-4 justify-center '>
                         {data.map(listing => (
-                            <div>
+                         
                                <ListingCard key={listing._id} listing={listing} />
-                            </div>
+                           
                         ))}
                     </div>
                 }

@@ -12,9 +12,9 @@ const ListingCard = ({listing}) => {
   return (
     <section>
          <div  onClick={handleNav}
-         className='flex flex-col gap-2 p-2 bg-slate-200 w-64 rounded-lg cursor-pointer'>
+         className='flex flex-col gap-2 p-2 bg-slate-200 w-64 rounded-lg cursor-pointer hover:scale-105'>
             <img src={listing.photos[0]} alt={listing.name} 
-                width={350}
+                width={350} 
             />
             <h2 className='uppercase truncate'>{listing.name}</h2>
             <div className='flex gap-2'>
