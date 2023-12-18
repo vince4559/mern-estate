@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useGetAllListingsQuery } from '../features/Llisting/listingApiSlice';
 import ListingCard from './ListingCard';
 import lottie from '/images/lotie.webm'
+import ReactPaginate from 'react-paginate';
+import '../App.css'
 
 
 const initials = {
@@ -17,14 +19,22 @@ const initials = {
 
 const SearchPage = () => {
     const [sideSearchData, setSideSearchData] = useState(initials);
-
-
-    const navigate = useNavigate();
+    const  [pageNumber, setPageNumber] = useState(0);
 
     const urlparams = new URLSearchParams(location.search);
     const searchQuery = urlparams.toString();
-
     const {data, isLoading , isError} = useGetAllListingsQuery(searchQuery);
+    
+    const userPerPage= 2;
+    const pageVisied = pageNumber * userPerPage;
+
+    // displayUsers =data.map()
+
+    const navigate = useNavigate();
+
+
+
+    
     // console.log(data)
        
 
@@ -102,9 +112,14 @@ const SearchPage = () => {
             })
         }
 
-    },[location.search])
+    },[location.search]);
 
-    
+    const pageCount = Math.ceil(data?.length / userPerPage);
+
+    const pageChange = ({selected}) => {
+        setPageNumber(selected)
+        window.scroll(0, 450)
+    }
 
   return (
    <section className='p-4 flex flex-col gap-8'>
@@ -203,16 +218,31 @@ const SearchPage = () => {
                     isError && [] ? <p>Data not found</p> :
                     isLoading? <p>Data is loading</p> : 
                     <div className='flex flex-row l flex-wrap gap-4 justify-center '>
-                        {data.map(listing => (
-                         
-                               <ListingCard key={listing._id} listing={listing} />
-                           
-                        ))}
+                        {
+                            data.slice(pageVisied, pageVisied + userPerPage).
+                            map(listing => (
+                                <ListingCard key={listing._id} listing={listing} />
+                            ))
+                        }
                     </div>
                 }
             </div>
+
+           <div >
+                <ReactPaginate 
+                pageCount={pageCount}
+                onPageChange={pageChange}
+                renderOnZeroPageCount={null}
+                previousLabel={'Prev'}
+                nextLabel={'Next'}
+                containerClassName='paginationBtn'
+                activeClassName='paginationActive'
+                
+            />
+           </div>
    </section>
   )
 }
 
 export default SearchPage
+

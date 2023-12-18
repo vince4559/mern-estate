@@ -81,7 +81,7 @@ const Header = () => {
            <div className='md:flex hidden gap-5 '>
                 <NavLink to={'/'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Home</NavLink>
                 <NavLink to={'/profile'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Profile</NavLink>
-                <NavLink to={'/listings'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Listing</NavLink>
+                <NavLink to={'/search?searchTerm=+'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Listing</NavLink>
                {USER ? 
                <button onClick={handleLogOut}>Sign_Out</button> 
                :  <NavLink to={'/signin'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Sign in</NavLink>
@@ -96,11 +96,17 @@ const Header = () => {
 
            <div className={`md:hidden absolute w-full h-[90%] top-14 bg-gray-700 pl-5 py-24 duration-500 ${show? 'left-0': 'hidden'}  font-semibold`}>
                <div className='flex flex-col gap-5'>
-               <NavLink onClick={onToggle}  to={'/'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Home</NavLink>
-                <NavLink onClick={onToggle} to={'/profile'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Profile</NavLink>
+               <NavLink onClick={onToggle}  to={'/search?searchTerm=+'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>
+                Listings
+                </NavLink>
+                <NavLink onClick={onToggle} to={'/profile'} style={({isActive})=> isActive?              {color:'yellowgreen'} :{color:'white'} }>
+                    Profile
+                </NavLink>
                 {USER? 
                <button onClick={handleLogOut}>Sign_Out</button> 
-               :  <NavLink onClick={onToggle} to={'/signin'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>Sign in</NavLink>
+                : <NavLink onClick={onToggle} to={'/signin'} style={({isActive})=> isActive? {color:'yellowgreen'} :{color:'white'} }>
+                    Sign in
+                </NavLink>
                 }
                </div>
                <div className='mt-10'>

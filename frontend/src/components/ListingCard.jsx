@@ -24,7 +24,8 @@ const ListingCard = ({listing}) => {
             <p className="truncate">{listing.desc}</p>
 
             <h3 className='bold'>
-            {listing.type === 'Rent'? `$${listing.regularPrice} / Month` : `$${listing.regularPrice}`}
+            {listing.type === 'Rent'? `$${listing.regularPrice.toLocaleString('en-US')} / Month` 
+            : `$${listing.regularPrice.toLocaleString('en-US')}`}
             </h3>
 
             <div>
