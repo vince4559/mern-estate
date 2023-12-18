@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllListingsQuery } from '../features/Llisting/listingApiSlice';
+import ListingCard from './ListingCard';
+import lottie from '/images/lotie.webm'
 
 
 const initials = {
@@ -15,13 +17,15 @@ const initials = {
 
 const SearchPage = () => {
     const [sideSearchData, setSideSearchData] = useState(initials);
-    const [listings, setListing] = useState([]);
-    const [loading, setLoading] = useState(false);
-    console.log(listings)
+
 
     const navigate = useNavigate();
 
-    const {data, isLoading } = useGetAllListingsQuery();
+    const urlparams = new URLSearchParams(location.search);
+    const searchQuery = urlparams.toString();
+
+    const {data, isLoading , isError} = useGetAllListingsQuery(searchQuery);
+    // console.log(data)
        
 
 
@@ -31,7 +35,7 @@ const SearchPage = () => {
             setSideSearchData({...sideSearchData, type: e.target.id})
        };
        
-        // value category
+        // search category
        if(e.target.id === 'searchTerm'){
         setSideSearchData({...sideSearchData, searchTerm: e.target.value})
        };
@@ -98,28 +102,16 @@ const SearchPage = () => {
             })
         }
 
-        // fetch listings here
-        const searchQuery = urlparams.toString();
-        const fetchListings = async () => {
-            setLoading(true)
-            const res = await fetch(`http://localhost:3500/api/getlistings?${searchQuery}`);
-            const data = await res.json();
-            setLoading(false)
-            setListing(data)
-        }
-        
-        fetchListings();
-
     },[location.search])
 
     
 
   return (
-   <section className='p-5'>
-        <div>
-            <form className='w-2/5' onSubmit={handleSubmit}>
+   <section className='p-4 flex flex-col gap-8'>
+        <div className='w-full flex justify-around border-b'>
+            <form className='' onSubmit={handleSubmit}>
                 {/* search */}
-               <div className='flex gap-3 items-center'>
+               <div className='flex gap-2 items-center '>
                     <label className='whitespace-nowrap'>Search Term:</label>
                     <input type='search' id='searchTerm' placeholder='Search...'
                         value={sideSearchData.searchTerm}
@@ -129,7 +121,7 @@ const SearchPage = () => {
                </div>
                
                {/* Type */}
-               <div className='flex gap-2 items-center gap-3 wrap'>
+               <div className='flex  items-center flex-wrap justify-around border p-1 rounded-lg'>
                     <label className='whitespace-nowrap'>Type:</label>
                         {/* rent & sell */}
                     <div className='flex gap-1 items-center'>
@@ -163,7 +155,7 @@ const SearchPage = () => {
                </div>
 
                {/* amenities */}
-               <div className='flex gap-3 items-center'>
+               <div className='flex justify-around items-center'>
                     <label className='whitespace-nowrap'>Amenities:</label>
                     
                     {/* parking */}
@@ -198,7 +190,26 @@ const SearchPage = () => {
                </div>
                <button type='submit' className='btn btn-prim w-full'>Search</button>
             </form>
+
+            <div className='hidden md:block'>
+                <video src={lottie} width={400} preload={true}  loop controls />
+            </div>
         </div>
+
+        {/* fetch data here */}
+        <div className='mb-4'>
+                {
+                    isError? <p>Data not found</p> :
+                    isLoading? <p>Data is loading</p> : 
+                    <div className='flex flex-row l flex-wrap gap-4 justify-center '>
+                        {data.map(listing => (
+                            <div>
+                               <ListingCard key={listing._id} listing={listing} />
+                            </div>
+                        ))}
+                    </div>
+                }
+            </div>
    </section>
   )
 }

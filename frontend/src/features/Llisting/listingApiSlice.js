@@ -33,7 +33,7 @@ export const listingApiSlice = apiSlice.injectEndpoints({
         }),
 
         getAllListings: builder.query({
-            query: ({searchQuery}) => ({
+            query: (searchQuery) => ({
                 url: `/getlistings?${searchQuery}`
             })
         }),

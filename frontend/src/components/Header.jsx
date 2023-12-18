@@ -55,7 +55,7 @@ const Header = () => {
         if(searchTermFromUrl){
             setSearchTerm(searchTermFromUrl);
         }
-    },[location.search])
+    },[location.search]);
 
   return (
    <header className='w-full p-1 bg-black text-white'>
@@ -67,7 +67,7 @@ const Header = () => {
             </div>
            
                 <form onSubmit={handleSearchSubmit} className='flex gap-2 items-center'>
-                    <input type='search' id='search' placeholder='Search...'
+                    <input type='search' id='searchTerm' placeholder='Search...'
                     value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}
                     className='p-1 rounded-lg border border-white-400 text-black'
                      
