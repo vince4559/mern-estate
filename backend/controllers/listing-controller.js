@@ -9,9 +9,7 @@ exports.createListing = async(req, res) => {
     try {
         const urls = await Promise.all(files.map(uploadImage));
 
-        // console.log({urls});
         const url = [...urls].map(file =>file)
-        // console.log(`url:${url}`)
 
         listing = await listingModel.create({...req.body, photos:url});
     } catch (err) {
@@ -78,8 +76,8 @@ exports.updateListingById = async(req, res) => {
 exports.getListings = async (req, res) => {
 
     try {
-        const limit = parseInt(req.query.limit) || 9;
-        const startIndex = parseInt(req.query.startIndex) || 0;
+        // const limit = parseInt(req.query.limit) || 2;
+        // const startIndex = parseInt(req.query.startIndex) || 0;
 
         let offer = req.query.offer;
         if(offer === undefined || offer === 'false'){
@@ -101,11 +99,11 @@ exports.getListings = async (req, res) => {
             type = {$in: ['Sell', 'Rent']}
         };
 
-        const searchTerm = req.query.searchTerm || " ";
+        const searchTerm = req.query.searchTerm || "";
         const  sort = req.query.sort || "createdAt";
         const order = req.query.order || 'desc';
 
-        // const listings = await listingModel.find();
+
 
         const listings = await listingModel.find({
             name: {$regex: searchTerm, $options:'i'},
@@ -115,7 +113,7 @@ exports.getListings = async (req, res) => {
             type,
         }).sort(
             {[sort]: order}
-        ).limit(limit).skip(startIndex);
+        ) //.limit(limit).skip(startIndex);
         return res.status(200).json(listings)
     } catch (error) {
         console.log(error);
