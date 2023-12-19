@@ -34,8 +34,34 @@ export const listingApiSlice = apiSlice.injectEndpoints({
 
         getAllListings: builder.query({
             query: (searchQuery) => ({
-                url: `/getlistings?${searchQuery}`
-            })
+                url: `/getlistings?${searchQuery}`,
+            }),
+            providesTags: ['listings'],
+            keepUnusedDataFor: 60
+            
+        }),
+        recentOffer: builder.query({
+            query: () => ({
+                url: `/getlistings?offer=false&sort=createdAt&order=desc`
+            }),
+            providesTags: ['listings'],
+            keepUnusedDataFor: 60
+        }),
+
+        recentRent: builder.query({
+            query: () => ({
+                url: `/getlistings?type=Rent&sort=createdAt&order=desc`
+            }),
+            providesTags: ['listings'],
+            keepUnusedDataFor: 60
+        }),
+
+        recentSale: builder.query({
+            query: () => ({
+                url: `/getlistings?type=Sell&sort=createdAt&order=desc`
+            }),
+            providesTags: ['listings'],
+            keepUnusedDataFor: 60
         }),
 
     })
@@ -48,4 +74,7 @@ export const {
     useUpdateListingMutation ,
     useGetListingByIdQuery,
     useGetAllListingsQuery,
+    useRecentOfferQuery,
+    useRecentRentQuery,
+    useRecentSaleQuery
 }     = listingApiSlice;

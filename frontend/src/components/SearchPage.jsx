@@ -24,24 +24,15 @@ const SearchPage = () => {
     const urlparams = new URLSearchParams(location.search);
     const searchQuery = urlparams.toString();
     const {data, isLoading , isError} = useGetAllListingsQuery(searchQuery);
-    
-    const userPerPage= 2;
-    const pageVisied = pageNumber * userPerPage;
 
-    // displayUsers =data.map()
+    const userPerPage= 10;
+    const pageVisied = pageNumber * userPerPage;
 
     const navigate = useNavigate();
 
-
-
-    
-    // console.log(data)
-       
-
-
     const handleOnchange = (e) => {
         // type category
-       if(e.target.id === 'all' || e.target.id === 'rent' || e.target.id === 'sell'){
+       if(e.target.id === 'all' || e.target.id === 'Rent' || e.target.id === 'Sell'){
             setSideSearchData({...sideSearchData, type: e.target.id})
        };
        
@@ -147,14 +138,14 @@ const SearchPage = () => {
                     </div>
                         {/* rent */}
                     <div className='flex gap-1 items-center'>
-                        <input type='checkbox' id='rent' checked={sideSearchData.type === 'rent'} 
+                        <input type='checkbox' id='Rent' checked={sideSearchData.type === 'Rent'} 
                             onChange={handleOnchange}
                         />
                         <span>Rent</span>
                     </div>
                         {/* sell */}
                     <div className='flex gap-1 items-center'>
-                        <input type='checkbox' id='sell' checked={sideSearchData.type === 'sell'} 
+                        <input type='checkbox' id='Sell' checked={sideSearchData.type === 'Sell'} 
                             onChange={handleOnchange}
                         />
                         <span>Sell</span>

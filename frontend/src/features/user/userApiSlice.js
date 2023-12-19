@@ -9,7 +9,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url:`/updateuser/${id}`, 
                 method:'PUT',
                 body:rest
-            })
+            }),
+            invalidatesTags: ['id', 'rest']
         }),
 
         deleteUSer: builder.mutation({
@@ -17,7 +18,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
                 url:`/deleteuser/${id}`,
                 method: 'DELETE',
                 body:id
-            })
+            }),
+            invalidatesTags: ['id']
         }),
 
         userListing: builder.query({

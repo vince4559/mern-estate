@@ -16,7 +16,7 @@ const ListingCard = ({listing}) => {
             <img src={listing.photos[0]} alt={listing.name} 
                 width={350} 
             />
-            <h2 className='uppercase truncate'>{listing.name}</h2>
+            <h3 className='uppercase truncate'>{listing.name}</h3>
             <div className='flex gap-2'>
                 <p>{location.address}</p>
             </div>

@@ -2,9 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;700&display=swap');
+
 @layer base {
+    html{
+        @apply text-black; font-family: 'Merriweather', serif;
+    }
     h1{
-        @apply text-3xl font-sans
+        @apply text-3xl font-bold  md:text-5xl
+    }
+    h2{
+        @apply text-2xl  
+    }
+    h3{
+        @apply text-lg
     }
     input, textarea{
         @apply p-1 border border-blue-400 rounded-lg text-black
@@ -20,5 +31,8 @@
     }
     .btn-sec{
         @apply bg-blue-700 text-white 
+    }
+    a{
+        @apply text-blue-500 hover:text-blue-400 transition hover:underline underline-offset-4 font-bold text-xl
     }
 }

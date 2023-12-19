@@ -8,20 +8,25 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 url:'/signin',
                 method:'POST',
                 body:{...Credential}
-            })
+            }),
+            invalidatesTags: ['Credential']
         }),
+
         signup: builder.mutation({   // login
             query:(Credential) => ({
                 url:'/signup',
                 method:'POST',
                 body:{...Credential}
-            })
+            }),
+            invalidatesTags: ['Credential']
         }),
+
         signout:builder.mutation({     //logout
-            query:() => ({
+            query:(Credential) => ({
                 url:'/signout',
                 method:'GET',
-            })
+            }),
+            invalidatesTags: ['Credential']
         })
     })
 })

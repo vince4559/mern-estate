@@ -7,7 +7,8 @@ export const contactApiSlice  = apiSlice.injectEndpoints({
                 url: '/sendemail',
                 method: "POST",
                 body: {...credentail}
-            })
+            }),
+            invalidatesTags: ['credential']
         }),
 
     })

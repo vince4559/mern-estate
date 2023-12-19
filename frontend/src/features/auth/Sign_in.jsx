@@ -12,7 +12,7 @@ const Sign_in = () => {
     const [errmsg, setErrmsg] = useState('');
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/welcome"
+    const from = location.state?.from?.pathname || "/profile"
 
     const errRef = useRef();
     const userRef = useRef();

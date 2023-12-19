@@ -12,7 +12,9 @@ const ImageCarosel = ({photo}) => {
 
 const items = [
   <div> <img className='w-screen h-96 contain' src={photo[0]} alt='lsiting' /> </div>,
-  <div> <img className='w-screen h-96 contain' src={photo[0]} alt='lsiting' /> </div>,
+  <div> <img className='w-screen h-96 contain' src={photo[1]} alt='lsiting' /> </div>,
+  <div> <img className='w-screen h-96 contain' src={photo[2]} alt='lsiting' /> </div>,
+  <div> <img className='w-screen h-96 contain' src={photo[3]} alt='lsiting' /> </div>,
 ];
 
   return (
@@ -22,10 +24,10 @@ const items = [
       responsive={responsive}
       autoPlay
       infinite
-      autoPlayInterval={1000}
+      autoPlayInterval={2000}
       disableButtonsControls
-      animationDuration={1500}
-      disableDotsControls
+      animationDuration={2000}
+      // disableDotsControls
     />
   )
 }

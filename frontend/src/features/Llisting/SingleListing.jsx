@@ -21,8 +21,8 @@ const SingleListing = () => {
   return (
    <section>
       <ImageCarosel photo={photo} />
-      <div className='px-10 my-5 w-[70%] mx-auto'>
-        <h2 className='uppercase'>{listing.name}</h2>
+      <div className='p-3 md:px-10 my-5 w-[70%] mx-auto'>
+        <h3 className='uppercase'>{listing.name}</h3>
 
         <h3 className='bold'>
           {listing.type === 'Rent'? `$${listing.regularPrice} / Month` : `$${listing.regularPrice}`}
@@ -48,7 +48,7 @@ const SingleListing = () => {
             <span>{listing.desc}</span>
         </p>
 
-        <div className='flex gap-5 my-4'>
+        <div className='flex gap-5 my-4 flex-wrap'>
           <p className='flex gap-1 items-center'>
             <FaBed size={18} color='green' />
             {listing.bedroom} {listing.bedroom > 1 ? 'Beds' : 'Bed'}
