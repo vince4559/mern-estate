@@ -1,82 +1,83 @@
-import React, { useEffect, useRef, useState } from 'react'
+
 import { useSigninMutation } from './authApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentails } from './authSlice';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from 'react-hook-form'
+import { object, string} from 'yup';
+
 
 
 const Sign_in = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [errmsg, setErrmsg] = useState('');
     const location = useLocation();
 
-    const from = location.state?.from?.pathname || "/profile"
+    const from = location.state?.from?.pathname || "/profile";
 
-    const errRef = useRef();
-    const userRef = useRef();
+    // yup validation
+    const userValidatorSchema = object().shape({
+        email:string().email().required('email is required'),
+        password: string().min(5, 'password must be more than 4').required('password is required')
+    });
 
-    useEffect(() => {
-        errRef.current?.focus();
-    },[]);
+    // connecting yup with react-hook
 
-    useEffect(() => {
-        setErrmsg('')
-    },[email, password]);
+    const {
+        register, formState:{errors}, handleSubmit, reset 
+    } = useForm({
+        resolver: yupResolver(userValidatorSchema),
+        reValidateMode: 'onChange',
+        criteriaMode: 'all',
+        mode: 'onTouched'
+    });
+
+
 
     const navigate = useNavigate();
 
     const dispatch =  useDispatch();
     const [ signIn, {isLoading}] = useSigninMutation();
 
-    const handleSignIn =async (e) => {
-        e.preventDefault()
+
+    const onSubmit = async( data) => {
+        const email = data.email;
         try {
-            const userData =await signIn({email, password}).unwrap();
+            const  userData= await signIn(data).unwrap();
             const username = userData.user
-            // console.log(userData)
             dispatch(setCredentails({...userData, email, username  }))
-            toast.success('Sign_in Successfull')
-            setEmail('');
-            setPassword('');
+            toast.success('Sign_in Successfully')
+           reset()
             navigate(from, {replace: true})
             
         } catch (err) {
-            if(!err.originalStatus){
-                setErrmsg('No Server Response');
-            }else if(err.originalStatus === 400){
-                setErrmsg('Missing credentails');
-            }else if(err.originalStatus === 401){
-                setErrmsg('Unauthorsed');
-            }else{
-                setErrmsg('Sign_in failed');
-            }
-            errRef.current?.focus();
-            toast.error('error occured')
+            toast.error(`${err.data.message}`)
         }
-    }
+    };
 
    
   return (
     <section className='flex flex-col items-center'>
-        <p className='text-red-400'>{errmsg}</p>
-        {isLoading? <p>Loading ...</p> : 
+        { isLoading? <p>Loading ...</p> : 
         <div>
             <h2 className='text-center my-4'>Sign in  here...</h2>
-            <form onSubmit={handleSignIn} >
+      
+            <form onSubmit={handleSubmit(onSubmit)}  > 
+
                 <label htmlFor='email'> Email: <br/>
-                    <input type='email' placeholder='Enter Your Email' id='email' value={email} 
-                    onChange={e => setEmail(e.target.value)} required ref={userRef} 
-                    />
+                    <input type='email' placeholder='Enter Your Email' id='email'  
+                     {...register('email')} />
+                     {errors.email?.message && <p>{errors.email?.message}</p>}
                 </label> 
+
                 <label htmlFor='password'> Password: <br/>
-                    <input type='password' placeholder='Enter Your Email' id='password' autoComplete='off'
-                    value={password} onChange={e => setPassword(e.target.value)} required ref={userRef}
+                    <input type='password' placeholder='Enter Your password' id='password' autoComplete='off'
+                     {...register('password')}
                     />
+                    {errors.password?.message && <p className='text-red-900'>{errors.password?.message}</p>}
                 </label>
 
-                <button className='btn btn-prim w-full'>
+                <button  className='btn btn-prim w-full'>
                     Sign in
                 </button>
                 <p>Don't have an account? <Link className='text-blue-600' to={'/signup'}>Sign_Up</Link></p>
@@ -84,7 +85,7 @@ const Sign_in = () => {
         </div>
         }
         <ToastContainer 
-            autoClose={1000}
+            autoClose={1500}
             draggable
             theme='dark'
         />
