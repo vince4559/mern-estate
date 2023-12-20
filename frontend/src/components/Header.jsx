@@ -58,7 +58,7 @@ const Header = () => {
     },[location.search]);
 
   return (
-   <header className='w-full p-1 bg-black text-white '>
+   <header className='w-full  bg-black text-white relative sticky top-0 z-10 '>
         <nav className=' flex justify-between px-3 items-center'>
             <div className='z-50 '>
                 <NavLink to={'/'}>

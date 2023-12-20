@@ -12,19 +12,22 @@
         @apply text-3xl font-bold  md:text-5xl
     }
     h2{
-        @apply text-2xl  
+        @apply text-3xl  
     }
     h3{
+        @apply text-2xl
+    }
+    p{
         @apply text-lg
     }
     input, textarea{
-        @apply p-1 border border-blue-400 rounded-lg text-black
+        @apply px-2 border border-blue-400 rounded-lg text-black w-full h-12
     }
     label{
         @apply text-blue-900 block my-3 text-base p-2
     }
     .btn{
-        @apply p-2 rounded-lg hover:transition hover:duration-300 hover:opacity-80 disabled:bg-slate-400 hover:disabled:opacity-100
+        @apply p-2 rounded-lg hover:transition hover:duration-300 hover:opacity-80 disabled:bg-slate-400 hover:disabled:opacity-100 uppercase h-12 mb-5
     }
     .btn-prim{
         @apply bg-blue-900 text-white 
@@ -34,5 +37,11 @@
     }
     a{
         @apply text-blue-500 hover:text-blue-400 transition hover:underline underline-offset-4 font-bold text-xl
+    }
+    .errMsg{
+        @apply text-red-900 
+    }
+    .flexContainer{
+        @apply flex flex-col items-center bg-gray-200 p-5 w-full h-screen md:pt-20
     }
 }

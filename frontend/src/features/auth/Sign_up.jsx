@@ -1,51 +1,69 @@
-import React, { useState } from 'react';
 import { useSignupMutation } from './authApiSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form'
+import {string, object} from 'yup';
 
 
 const Sign_up = () => {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
     const navigate =  useNavigate();
 
     const [signup, {isLoading}] = useSignupMutation();
 
-    const handleSignup = async(e) => {
-        e.preventDefault();
+    // yup validator
+    const userValidatorSchema = object().shape({
+        username: string().required('username is required'),
+        email: string().email('input a valid email').required('email is required'),
+        password: string().min(6, 'password not strong enough').required(),
+    });
+
+    // connecting yup with react-hook-form
+   const {register, reset, formState:{errors}, handleSubmit} = useForm({
+    resolver: yupResolver(userValidatorSchema),
+    reValidateMode:'onChange',
+    criteriaMode: 'all',
+    mode: 'all'
+   })
+
+
+    const handleSignup = async(data) => {
         try {
-            await signup({username, email, password}).unwrap();
-            toast.success('Sign_up Successfull')
-            setUsername('')
-            setEmail('');
-            setPassword('');
-           navigate('/signin')
+            await signup(data).unwrap();
+            toast.success('Sign_up Successfully');
+            reset();
+            navigate('/signin');
         } catch (err) {
-            toast.error("Error occured during Sign_up")
-            console.log(err.message)
+            toast.error(`${err.data.message}`)
+
         }
     }
+ 
+   
   return (
-    <section className='flex flex-col items-center'>
+    <section className='flexContainer'>
+         <h2 className='text-center my-4 capitalize'> welcome to noble's estate</h2>
+        <h3 className='text-center my-4 capitalize text-blue-800'>Sign up here...</h3>
         {isLoading? <p>Loading ...</p> 
         :
-        <form onSubmit={handleSignup}>
+        <form onSubmit={handleSubmit(handleSignup)}>
             <label htmlFor='Username'>Username: <br />
                  <input type='text' id='username' required placeholder='username' 
-                    value={username} onChange={(e) => setUsername(e.target.value)}
+                   {...register('username')}
                  />            
+                 {errors.username?.message && <p className='errMsg'>{errors.username?.message}</p>}
             </label> 
             <label htmlFor='email'>Email: <br />
                  <input type='email' id='email' required placeholder='email'
-                    value={email} onChange={(e) => setEmail(e.target.value)}
+                    {...register("email")}
                  />            
+                 {errors.email?.message && <p className='errMsg'>{errors.email?.message}</p>}
             </label> 
             <label htmlFor='password'>Password: <br />
                  <input type='password' id='password' required placeholder='password'
-                    value={password} onChange={(e) => setPassword(e.target.value)} autoComplete='off'
+                  autoComplete='off' {...register("password")}
                  />            
+                 {errors.password?.message && <p className='errMsg'>{errors.password?.message}</p>}
             </label> 
             
             <button className='btn btn-sec w-full'>

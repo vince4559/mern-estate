@@ -18,7 +18,7 @@ const Sign_in = () => {
     // yup validation
     const userValidatorSchema = object().shape({
         email:string().email().required('email is required'),
-        password: string().min(5, 'password must be more than 4').required('password is required')
+        password: string().min(5, 'password must be at least 5').required()
     });
 
     // connecting yup with react-hook
@@ -29,7 +29,7 @@ const Sign_in = () => {
         resolver: yupResolver(userValidatorSchema),
         reValidateMode: 'onChange',
         criteriaMode: 'all',
-        mode: 'onTouched'
+        mode: 'onBlur'
     });
 
 
@@ -57,24 +57,25 @@ const Sign_in = () => {
 
    
   return (
-    <section className='flex flex-col items-center'>
+    <section className='flexContainer'>
         { isLoading? <p>Loading ...</p> : 
-        <div>
-            <h2 className='text-center my-4'>Sign in  here...</h2>
+        <div >
+            <h2 className='text-center my-4 capitalize'> welcome to noble's estate</h2>
+            <h3 className='text-center my-4 capitalize text-blue-800'>Sign in here...</h3>
       
             <form onSubmit={handleSubmit(onSubmit)}  > 
 
                 <label htmlFor='email'> Email: <br/>
                     <input type='email' placeholder='Enter Your Email' id='email'  
                      {...register('email')} />
-                     {errors.email?.message && <p>{errors.email?.message}</p>}
+                     {errors.email?.message && <p className='errMsg'>{errors.email?.message}</p>}
                 </label> 
 
                 <label htmlFor='password'> Password: <br/>
                     <input type='password' placeholder='Enter Your password' id='password' autoComplete='off'
                      {...register('password')}
                     />
-                    {errors.password?.message && <p className='text-red-900'>{errors.password?.message}</p>}
+                    {errors.password?.message && <p className='errMsg'>{errors.password?.message}</p>}
                 </label>
 
                 <button  className='btn btn-prim w-full'>
