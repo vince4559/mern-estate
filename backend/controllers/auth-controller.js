@@ -144,4 +144,39 @@ exports.signout = async(req, res) => {
 
     res.clearCookie('jwt', {httpOnly:true, sameSite:'none', secure:true});
     res.sendStatus(204)
+};
+
+
+// sign in using google
+exports.googleSignIn = async (req, res) => {
+    try {
+        // check if email exist
+        const user = User.findOne({email: req.body.email});
+
+        if(user){
+            const token = jwt.sign({id:user._id}, process.env.ACCESS_TOKEN);
+            const {password: pass, ...rest} = user._doc;
+
+            res.cookie('access_token', token, {httpOnly: true})
+                .status(200)
+                .json(rest);
+        }else{
+            const generatedPassword = Math.random().toString(36).slice(-8);
+            const hashedPassword = bcrypt.hashSync(generatedPassword, 10);
+            const newUser = new User({
+                username: req.body.name.split(" ").join("").toLowerCase() + Math.random().toString(36).slice(-4),
+                password: hashedPassword,
+                email: req.body.email,
+            });
+
+            await newUser.save();
+
+            const token = jwt.sign({id: newUser._id}, process.env.ACCESS_TOKEN);
+            const {password: pass, ...rest} = newUser._doc;
+            res.cookie('access_token', token, {httpOnly: true})
+               .status(200).json(rest)
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
