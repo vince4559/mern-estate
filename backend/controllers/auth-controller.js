@@ -1,6 +1,9 @@
 const User = require('../models/user-model');
+const Token = require('../models/token-model');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const sendEmail = require('../utils/sendEmail')
 
 
  exports.signup = async(req, res) => {
@@ -30,13 +33,56 @@ const jwt = require('jsonwebtoken');
             email,
             password: hashedPwd
         });
+
+        // send verification link after signup
+
+        //sending userId and token to Token model
+        const token = await new Token({
+            userId: result._id,
+            token: crypto.randomBytes(32).toString('hex')
+        }).save();
+
+        // frontend url to send to the user email to verify email
+        const url = `http://localhost:5173/user/${result._id}/verify/${token.token}`;
+
+        const send_to = result.email;
+        const sent_from = process.env.EMAIL_USER; //"dynamickubbs@outlook.com";
+        const message = `
+            <p>Hello ${result.username}, Verify your Email by clicking this link </p>
+            <a href=${url}>Verify your email address</a>
+            <p> This link expires in 1hr </p>
+        `
+      
+        // send email to verify email
+        sendEmail(sent_from, send_to, "Verify Email", message)
     
         console.log(result);
-        res.status(201).json({message: "user created successfully"})
+        res.status(201).send({message: "Please verify Email sent to your inbox to continue"})
     } catch (err) {
         res.status(500).json({message:`${err.message}`})
     }
 };
+
+exports.verifyEmail = async (req, res) => {
+    // verify link by email
+    try {
+        const user = await User.findOne({_id: req.params.id}).exec();
+        if(!user) return res.status(400).send({message: "invalid link"});
+
+        const token = await Token.findOne({userId: user._id, token: req.params.token}).exec();
+ 
+        if(!token) return res.status(400).send({message: "invalid link"});
+    
+        await User.updateOne({_id:user._id},{verified: true}).exec();
+        await token.remove;
+
+        res.status(200).send({message: "Email verified successfully"});
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({message: "internal server error"})
+    }
+}
 
 
 exports.signin = async(req, res) => {
@@ -47,14 +93,41 @@ exports.signin = async(req, res) => {
     const foundUser = await User.findOne({email}).exec();
     // console.log(foundUser)
     if(!foundUser) return res.status(401).json({message:"user does not exist"});
+    // console.log(foundUser.verified)
 
+    // resnd link if not verified
+    if(!foundUser.verified){
+        let token = await Token.findOne({userId: foundUser._id}).exec();
+        if(!token){
+            const token = await new Token({
+                userId: foundUser._id,
+                token: crypto.randomBytes(32).toString('hex')
+            }).save();
     
+            // frontend url to send to the user email to verify email
+        const url = `http://localhost:5173/user/${result._id}/verify/${token.token}`;
+    
+            const send_to = foundUser.email;
+            const sent_from = process.env.EMAIL_USER; //"dynamickubbs@outlook.com";
+            const message = `
+                <p>Hello ${foundUser.username}, Verify your Email by clicking this link </p>
+                <a href=${url}>Verify your email address</a>
+                <p> This link expires in 1hr </p>
+            `
+          
+            // send email to verify email
+            sendEmail(sent_from, send_to, "Verify Email", message)
+        
+            res.status(201).send({message: "Please verify email sent to your inbox"})
+        }
+    }
+
     // check if password is matches
     const pwdMatch = bcrypt.compareSync(password, foundUser.password)
     // if(!pwdMatch) return res.status(401).json({message:"wrong incredentials... check email | password"});
     
     // create jwt 
-   if(pwdMatch){
+   if(pwdMatch && foundUser.verified ){
     const roles = Object.values(foundUser.roles);
     const user = foundUser.username;
     const _id = foundUser._id;
@@ -138,7 +211,7 @@ exports.signout = async(req, res) => {
     };
 
     // delete refreshtoken in db
-    foundUser.refreshToken == ' ';
+    foundUser.refreshToken = '';
     const result = await foundUser.save();
     console.log(result)
 
@@ -151,7 +224,7 @@ exports.signout = async(req, res) => {
 exports.googleSignIn = async (req, res) => {
     try {
         // check if email exist
-        const user = await User.findOne({email: req.body.email});
+        const user = await User.findOne({email: req.body.email}).exec();
 
         if(user){
             const token = jwt.sign({id:user._id}, process.env.ACCESS_TOKEN);
@@ -171,9 +244,10 @@ exports.googleSignIn = async (req, res) => {
                 username: req.body.username,
                 password: hashedPassword,
                 email: req.body.email,
-                refreshToken: refreshToken
+                refreshToken
             });
 
+            
             await newUser.save();
 
             const roles = Object.values(newUser.roles);

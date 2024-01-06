@@ -1,6 +1,6 @@
 
 // const bucket = require('./initializeApp');
-const bucket = require("../firebaseStorage/fileStorage")
+const bucket = require("./fileStorage")
 
 
 

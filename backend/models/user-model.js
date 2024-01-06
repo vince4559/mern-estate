@@ -16,6 +16,10 @@ const userScheema =  new Schema({
         type:String,
         required: true,
     },
+    verified:{
+        type:Boolean, 
+        default: false
+    },
     roles:{
         User:{
             type:Number,
