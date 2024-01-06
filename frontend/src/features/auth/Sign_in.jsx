@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from 'react-hook-form'
 import { object, string} from 'yup';
+import GoogleAuth from '../../firebase/GoogleAuth';
 
 
 
@@ -46,7 +47,7 @@ const Sign_in = () => {
             const  userData= await signIn(data).unwrap();
             const username = userData.user
             dispatch(setCredentails({...userData, email, username  }))
-            toast.success('Sign_in Successfully')
+            toast.success(userData.message)
            reset()
             navigate(from, {replace: true})
             
@@ -78,6 +79,10 @@ const Sign_in = () => {
                     {errors.password?.message && <p className='errMsg'>{errors.password?.message}</p>}
                 </label>
 
+                <p className='text-red-500 '>
+                    NOTE: your email must be verified before trying to login
+                </p>
+                
                 <button  className='btn btn-prim w-full'>
                     Sign in
                 </button>
@@ -85,6 +90,7 @@ const Sign_in = () => {
             </form>
         </div>
         }
+          <GoogleAuth />
         <ToastContainer 
             autoClose={1500}
             draggable

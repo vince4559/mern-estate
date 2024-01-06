@@ -11,6 +11,7 @@ import SingleListing from './features/Llisting/SingleListing'
 import Listings from './features/Llisting/Listings'
 import EditListing from './features/Llisting/EditListing'
 import SearchPage from './components/SearchPage'
+import VerifyEmail from './features/auth/VerifyEmail'
 
 
 const App = () => {
@@ -25,6 +26,7 @@ const App = () => {
         <Route path='/listings' element={<Listings />} />
         <Route path='/listing/:id' element={<SingleListing />} />
         <Route path='/search' element={<SearchPage />} />
+        <Route path='/user/:id/verify/:token' element={<VerifyEmail />} />
   
    
 

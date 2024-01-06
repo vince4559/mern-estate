@@ -4,9 +4,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form'
 import {string, object} from 'yup';
+import { useState } from 'react';
 
 
 const Sign_up = () => {
+    const [msg, setMsg] = useState('');
     const navigate =  useNavigate();
 
     const [signup, {isLoading}] = useSignupMutation();
@@ -29,10 +31,11 @@ const Sign_up = () => {
 
     const handleSignup = async(data) => {
         try {
-            await signup(data).unwrap();
-            toast.success('Sign_up Successfully');
-            reset();
-            navigate('/signin');
+           const res = await signup(data).unwrap();
+           setMsg(res.message)
+            toast.success(res.message);
+            // reset();
+            // navigate('/signin');
         } catch (err) {
             toast.error(`${err.data.message}`)
 
@@ -65,7 +68,7 @@ const Sign_up = () => {
                  />            
                  {errors.password?.message && <p className='errMsg'>{errors.password?.message}</p>}
             </label> 
-            
+            {msg && <div className='bg-red-900 text-white p-2 rounded-lg my-4'>{msg}</div>}
             <button className='btn btn-sec w-full'>
                 Sign_Up
             </button>
@@ -73,7 +76,7 @@ const Sign_up = () => {
         </form>
         }
          <ToastContainer 
-            autoClose={1000}
+            autoClose={3000}
             draggable
             theme='dark'
         />

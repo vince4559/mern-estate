@@ -27,8 +27,31 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 method:'GET',
             }),
             invalidatesTags: ['Credential']
+        }),
+
+        googleSignIn: builder.mutation({
+            query: (Credential) => ({
+                url: '/google',
+                method: 'POST',
+                body: {...Credential}
+            }),
+            invalidatesTags: ['Credential']
+        }),
+
+        verifyEmail:builder.query({
+            query: ({id, token}) => ({
+                url: `/user/${id}/verify/${token}`,
+                method: "GET"
+            })
         })
+
     })
 })
 
-export const {useSigninMutation, useSignupMutation, useSignoutMutation} =authApiSlice;
+export const {
+    useSigninMutation, 
+    useSignupMutation, 
+    useSignoutMutation, 
+    useGoogleSignInMutation,
+    useVerifyEmailQuery,
+} =authApiSlice;
