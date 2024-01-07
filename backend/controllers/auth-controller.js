@@ -92,20 +92,24 @@ exports.signin = async(req, res) => {
       // check if user with email exist in the database
     const foundUser = await User.findOne({email}).exec();
     // console.log(foundUser)
-    if(!foundUser) return res.status(401).json({message:"user does not exist"});
-    // console.log(foundUser.verified)
+    if(!foundUser) return res.status(401).json({message:"This user does not exist"});
+    
+    // check if password is matches
+    const pwdMatch = bcrypt.compareSync(password, foundUser.password)
+    if(!pwdMatch) return res.status(401).json({message:"wrong incredentials... check email | password"});
+  
 
     // resnd link if not verified
     if(!foundUser.verified){
         let token = await Token.findOne({userId: foundUser._id}).exec();
         if(!token){
-            const token = await new Token({
+             token = await new Token({
                 userId: foundUser._id,
                 token: crypto.randomBytes(32).toString('hex')
             }).save();
     
             // frontend url to send to the user email to verify email
-        const url = `http://localhost:5173/user/${result._id}/verify/${token.token}`;
+        const url = `http://localhost:5173/user/${foundUser._id}/verify/${token.token}`;
     
             const send_to = foundUser.email;
             const sent_from = process.env.EMAIL_USER; //"dynamickubbs@outlook.com";
@@ -117,17 +121,13 @@ exports.signin = async(req, res) => {
           
             // send email to verify email
             sendEmail(sent_from, send_to, "Verify Email", message)
-        
-            res.status(201).send({message: "Please verify email sent to your inbox"})
         }
+       return res.status(400).send({message: "Please verify email sent to your inbox"})
     }
 
-    // check if password is matches
-    const pwdMatch = bcrypt.compareSync(password, foundUser.password)
-    // if(!pwdMatch) return res.status(401).json({message:"wrong incredentials... check email | password"});
     
     // create jwt 
-   if(pwdMatch && foundUser.verified ){
+   if(pwdMatch  ){
     const roles = Object.values(foundUser.roles);
     const user = foundUser.username;
     const _id = foundUser._id;
