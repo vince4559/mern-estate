@@ -92,7 +92,7 @@ const Sign_in = () => {
         }
           <GoogleAuth />
         <ToastContainer 
-            autoClose={1500}
+            autoClose={2500}
             draggable
             theme='dark'
         />
