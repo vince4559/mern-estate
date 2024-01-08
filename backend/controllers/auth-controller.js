@@ -43,7 +43,7 @@ const sendEmail = require('../utils/sendEmail')
         }).save();
 
         // frontend url to send to the user email to verify email
-        const url = `http://localhost:5173/user/${result._id}/verify/${token.token}`;
+        const url = `process.env.FRONTEND_BASE_URL/user/${result._id}/verify/${token.token}`;
 
         const send_to = result.email;
         const sent_from = process.env.EMAIL_USER;
@@ -109,7 +109,7 @@ exports.signin = async(req, res) => {
             }).save();
     
             // frontend url to send to the user email to verify email
-        const url = `http://localhost:5173/user/${foundUser._id}/verify/${token.token}`;
+        const url = `process.env.FRONTEND_BASE_URL/user/${foundUser._id}/verify/${token.token}`;
     
             const send_to = foundUser.email;
             const sent_from = process.env.EMAIL_USER; 
@@ -269,9 +269,9 @@ exports.forgetPassword = async (req, res) => {
 
     if(!user) return res.status(400).send({message: 'user not found'});
 
-    const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN, {expiresIn: '3600'});
+    const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN, {expiresIn: '1hr'});
 
-    const url = `http://localhost:5173/reset-password/${user._id}/${token}`;
+    const url = `process.env.FRONTEND_BASE_URL/reset-password/${user._id}/${token}`;
     const send_to = user.email;
     const sent_from = process.env.EMAIL_USER;
     const message = `
@@ -283,4 +283,25 @@ exports.forgetPassword = async (req, res) => {
     // send link to email to reset password
     sendEmail(sent_from, send_to, "Reset Password", message)
    res.status(200).send({message: "Check your mail box to reset your password"})
+}
+
+
+exports.resetPassword = async (req, res) => {
+    const {id, token} = req.params;
+    const {password} = req.body;
+
+    if(!password) return res.status(400).send({message: 'password is required'})
+
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
+        if(err){
+            return res.send({message: err.message})
+        }else {
+            bcrypt.hash(password, 10)
+            .then(hash => {
+                User.findByIdAndUpdate({_id: id}, {password: hash})
+                .then(u => res.send({message: u}))
+                .catch(err => res.send({message: err.message}))
+            })
+        }
+    })
 }
