@@ -46,7 +46,7 @@ const sendEmail = require('../utils/sendEmail')
         const url = `http://localhost:5173/user/${result._id}/verify/${token.token}`;
 
         const send_to = result.email;
-        const sent_from = process.env.EMAIL_USER; //"dynamickubbs@outlook.com";
+        const sent_from = process.env.EMAIL_USER;
         const message = `
             <p>Hello ${result.username}, Verify your Email by clicking this link </p>
             <a href=${url}>Verify your email address</a>
@@ -112,7 +112,7 @@ exports.signin = async(req, res) => {
         const url = `http://localhost:5173/user/${foundUser._id}/verify/${token.token}`;
     
             const send_to = foundUser.email;
-            const sent_from = process.env.EMAIL_USER; //"dynamickubbs@outlook.com";
+            const sent_from = process.env.EMAIL_USER; 
             const message = `
                 <p>Hello ${foundUser.username}, Verify your Email by clicking this link </p>
                 <a href=${url}>Verify your email address</a>
@@ -260,4 +260,27 @@ exports.googleSignIn = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
+}
+
+exports.forgetPassword = async (req, res) => {
+    const {email} = req.body;
+
+    const user = await User.findOne({email}).exec();
+
+    if(!user) return res.status(400).send({message: 'user not found'});
+
+    const token = jwt.sign({id: user._id}, process.env.ACCESS_TOKEN, {expiresIn: '3600'});
+
+    const url = `http://localhost:5173/reset-password/${user._id}/${token}`;
+    const send_to = user.email;
+    const sent_from = process.env.EMAIL_USER;
+    const message = `
+    <p>Hello ${user.username}, reset your password by clicking this link </p>
+    <a href=${url}>Reset Password</a>
+    <p> This link expires in 1hr </p>
+    `;
+
+    // send link to email to reset password
+    sendEmail(sent_from, send_to, "Reset Password", message)
+   res.status(200).send({message: "Check your mail box to reset your password"})
 }
